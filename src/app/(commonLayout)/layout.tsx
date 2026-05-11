@@ -7,15 +7,15 @@ export const metadata: Metadata = {
     "A healthcare management system built with Next.js, Tailwind CSS, and TypeScript. Designed to streamline patient care, appointment scheduling, and medical record management for healthcare providers.",
 };
 
-export default function RootLayout({
+export default function CommonLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html>
-      <p>Root Layout</p>
-      <body className="min-h-full flex flex-col">{children}</body>
-    </html>
+    <>
+      <p>Common Layout</p>
+      {children}
+    </>
   );
 }

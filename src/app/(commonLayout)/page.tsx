@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div>
       <Card>
-        <CardTitle className="text-center">Tawhidul islam </CardTitle>
+        <CardTitle className="text-center">Common</CardTitle>
         <Button>Click here</Button>
       </Card>
     </div>
