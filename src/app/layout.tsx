@@ -1,5 +1,5 @@
+import QueryProviders from "@/providers/QueryProvider";
 import type { Metadata } from "next";
-
 
 export const metadata: Metadata = {
   title: "PH-Healthcare",
@@ -14,8 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html>
-      <p>Root Layout</p>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <QueryProviders>{children}</QueryProviders>
+      </body>
     </html>
   );
 }
