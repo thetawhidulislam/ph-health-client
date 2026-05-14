@@ -26,9 +26,18 @@ export const LoginAction = async (
     const { accessToken, refreshToken, token } = response.data;
     await setTokenInCookies("accessToken", accessToken);
     await setTokenInCookies("refreshToken", refreshToken);
-    await setTokenInCookies("better-auth.session_token", token);
+    await setTokenInCookies("better-auth.session_token", token, 24 * 60 * 60);
     redirect("/dashboard");
   } catch (error) {
+    if (
+      error &&
+      typeof error === "object" &&
+      "digest" in error &&
+      typeof error.digest === "string" &&
+      error.digest.startsWith("NEXT_REDIRECT")
+    ) {
+      throw error;
+    }
     return {
       success: false,
       message: `login failed : ${error instanceof Error ? error.message : "Unknown error"}`,

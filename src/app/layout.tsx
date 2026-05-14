@@ -1,5 +1,6 @@
 import QueryProviders from "@/providers/QueryProvider";
 import type { Metadata } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "PH-Healthcare",
