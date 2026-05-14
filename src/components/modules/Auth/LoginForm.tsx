@@ -17,7 +17,7 @@ import {
 import { ILoginPayload, loginZodSchema } from "@/zod/auth.validation";
 
 import { useForm } from "@tanstack/react-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
