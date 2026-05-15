@@ -21,7 +21,7 @@ export async function proxy(request: NextRequest) {
       accessToken &&
       jwtUtils.verifyToken(accessToken, process.env.JWT_ACCESS_SECRET as string)
         .success;
-
+ 
     let userRole: UserRole | null = null;
 
     if (decodedAccessToken) {
@@ -44,7 +44,7 @@ export async function proxy(request: NextRequest) {
     }
 
     if (!accessToken || !isValidAccessToken) {
-      const loginUrl = new URL("/login", request.url);
+      const loginUrl =  new URL("/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(loginUrl);
     }
@@ -65,7 +65,7 @@ export async function proxy(request: NextRequest) {
 
     return NextResponse.next();
   } catch (error) {
-    console.error("Error in proxy middleware:", error);
+    console.error("Error in proxy middlewares:", error);
   }
 }
 
