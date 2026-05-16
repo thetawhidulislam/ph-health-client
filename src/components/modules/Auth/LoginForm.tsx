@@ -21,15 +21,13 @@ import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
-interface LoginParams {
-  redirectPath: string;
-}
-const LoginForm = ({ redirectPath }: LoginParams) => {
+
+const LoginForm = () => {
   const [serverError, setServerError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   //   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: (payload: ILoginPayload) => LoginAction(payload ,redirectPath),
+    mutationFn: (payload: ILoginPayload) => LoginAction(payload),
   });
 
   const form = useForm({

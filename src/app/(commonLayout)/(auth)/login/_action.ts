@@ -1,6 +1,5 @@
 "use server";
 
-import { getDefaultDashboardRoute, isValidRedirectForRole, UserRole } from "@/lib/authUtils";
 import { httpClient } from "@/lib/axios/httpClient";
 import { setTokenInCookies } from "@/lib/tokenUtils";
 import { ApiErrorResponse } from "@/types/api.types";
@@ -10,7 +9,6 @@ import { redirect } from "next/navigation";
 
 export const LoginAction = async (
   payload: ILoginPayload,
-  redirectPath?: string,
 ): Promise<ILoginResponse | ApiErrorResponse> => {
   const parsedPayload = loginZodSchema.safeParse(payload);
   if (!parsedPayload.success) {
@@ -25,27 +23,11 @@ export const LoginAction = async (
       "/auth/login",
       parsedPayload.data,
     );
-    const { accessToken, refreshToken, token, user } = response.data;
-    const { role, needPasswordChange, emailVerified, email } = user;
+    const { accessToken, refreshToken, token } = response.data;
     await setTokenInCookies("accessToken", accessToken);
     await setTokenInCookies("refreshToken", refreshToken);
     await setTokenInCookies("better-auth.session_token", token, 24 * 60 * 60);
-    // if(!emailVerified){
-    //     redirect("/verify-email");
-    // }else // in the catch block
-
-    if (needPasswordChange) {
-      //TODO : refactoring
-      redirect(`/reset-password?email=${email}`);
-    } else {
-      // redirect(redirectPath || "/dashboard");
-      const targetPath =
-        redirectPath && isValidRedirectForRole(redirectPath, role as UserRole)
-          ? redirectPath
-          : getDefaultDashboardRoute(role as UserRole);
-
-      redirect(targetPath);
-    }
+    redirect("/dashboard");
   } catch (error) {
     if (
       error &&
