@@ -6,7 +6,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 if (BASE_URL) {
   throw new Error("NEXT_PUBLIC_API_BASE_URL is not found");
 }
-export async function refreshToken(refreshToken: string): Promise<boolean> {
+export async function getNewTokenWithRefreshToken(refreshToken: string): Promise<boolean> {
   try {
     const res = await fetch(`${BASE_URL}/auth/refresh-token`, {
       method: "POST",

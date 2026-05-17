@@ -6,7 +6,21 @@ import {
   isAuthRoute,
   UserRole,
 } from "./lib/authUtils";
+import { getNewTokenWithRefreshToken } from "./services/auth.service";
+import { isTokenExpiringSoon } from "./lib/tokenUtils";
 
+async function refreshTokenMiddleware(refreshToken: string): Promise<boolean> {
+  try {
+    const res = await getNewTokenWithRefreshToken(refreshToken);
+    if (!res) {
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.log(error, "error Refresh token");
+    return false;
+  }
+}
 export async function proxy(request: NextRequest) {
   try {
     const { pathname } = request.nextUrl;
@@ -21,7 +35,7 @@ export async function proxy(request: NextRequest) {
       accessToken &&
       jwtUtils.verifyToken(accessToken, process.env.JWT_ACCESS_SECRET as string)
         .success;
- 
+
     let userRole: UserRole | null = null;
 
     if (decodedAccessToken) {
@@ -34,6 +48,34 @@ export async function proxy(request: NextRequest) {
     userRole = unifySuperAdminAndAdminRole;
 
     const isAuth = isAuthRoute(pathname);
+
+    if (
+      isValidAccessToken &&
+      refreshToken &&
+      (await isTokenExpiringSoon(accessToken))
+    ) {
+      const requestHeader = new Headers(request.headers);
+      const response = NextResponse.next({
+        request: {
+          headers: requestHeader,
+        },
+      });
+      try {
+        const refreshed = await refreshTokenMiddleware(refreshToken);
+        if (refreshed) {
+          requestHeader.set("x-token-refreshed", "1");
+        }
+        return NextResponse.next({
+          request: {
+            headers: requestHeader,
+          },
+          headers: response.headers,
+        });
+      } catch (error) {
+        console.error("Error refreshing token:", error);
+      }
+      return response;
+    }
     if (isAuth && isValidAccessToken) {
       return NextResponse.redirect(
         new URL(getDefaultDashboardRoute(userRole as UserRole), request.url),
@@ -44,7 +86,7 @@ export async function proxy(request: NextRequest) {
     }
 
     if (!accessToken || !isValidAccessToken) {
-      const loginUrl =  new URL("/login", request.url);
+      const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(loginUrl);
     }
