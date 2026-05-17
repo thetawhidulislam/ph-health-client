@@ -126,6 +126,22 @@ export async function proxy(request: NextRequest) {
     // rule enforcing user to stay in reset password page if they need to change password
     if (accessToken) {
       const userInfo = await getUserInfo();
+
+      //email verify
+      if (userInfo?.emailVerified === false) {
+        if (pathname !== "/verify-email") {
+          const verifyEmailUrl = new URL("/verify-email", request.url);
+          verifyEmailUrl.searchParams.set("email", userInfo.email);
+          return NextResponse.redirect(verifyEmailUrl);
+        }
+        return NextResponse.next();
+      }
+      if (userInfo && userInfo.emailVerified && pathname === "/verify-email") {
+        return NextResponse.redirect(
+          new URL(getDefaultDashboardRoute(userRole as UserRole), request.url),
+        );
+      }
+      // need password change but not in reset password page => redirect to reset password page
       if (userInfo?.needPasswordChange) {
         if (pathname !== "/reset-password") {
           const resetPasswordUrl = new URL("/reset-password", request.url);
@@ -134,6 +150,7 @@ export async function proxy(request: NextRequest) {
         }
         return NextResponse.next();
       }
+      // don't need password change but in reset password page => redirect to default dashboard
       if (
         userInfo &&
         !userInfo.needPasswordChange &&

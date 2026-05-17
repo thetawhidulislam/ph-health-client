@@ -4,7 +4,7 @@ import { setTokenInCookies } from "@/lib/tokenUtils";
 import { cookies } from "next/headers";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-if (BASE_URL) {
+if (!BASE_URL) {
   throw new Error("NEXT_PUBLIC_API_BASE_URL is not found");
 }
 export async function getNewTokenWithRefreshToken(
@@ -54,8 +54,14 @@ export async function getUserInfo() {
     },
   });
   if (!res.ok) {
-    return null;
+    return {
+      id: "",
+      email: "",
+      name: "",
+      role: "",
+      needPasswordChange: false,
+    };
   }
   const { data } = await res.json();
-  return data
+  return data;
 }
