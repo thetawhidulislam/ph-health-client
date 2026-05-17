@@ -6,7 +6,10 @@ import {
   isAuthRoute,
   UserRole,
 } from "./lib/authUtils";
-import { getNewTokenWithRefreshToken } from "./services/auth.service";
+import {
+  getNewTokenWithRefreshToken,
+  getUserInfo,
+} from "./services/auth.service";
 import { isTokenExpiringSoon } from "./lib/tokenUtils";
 
 async function refreshTokenMiddleware(refreshToken: string): Promise<boolean> {
@@ -76,23 +79,76 @@ export async function proxy(request: NextRequest) {
       }
       return response;
     }
+    // rule 1
     if (isAuth && isValidAccessToken) {
       return NextResponse.redirect(
         new URL(getDefaultDashboardRoute(userRole as UserRole), request.url),
       );
     }
+
+    //rule 2
+    if (pathname === "reset-password") {
+      const email = request.nextUrl.searchParams.get("email");
+      // case 1 : user need pass chagne
+      if (accessToken && email) {
+        const userInfo = await getUserInfo();
+        if (userInfo.needPasswordChange) {
+          return NextResponse.next();
+        } else {
+          return NextResponse.redirect(
+            new URL(
+              getDefaultDashboardRoute(userRole as UserRole),
+              request.url,
+            ),
+          );
+        }
+      }
+      // case 2: come form forget pass
+      if (email) {
+        return NextResponse.next();
+      }
+      const loginUrl = new URL("/login", request.url);
+      loginUrl.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    //rule 3
     if (routerOwner === null) {
       return NextResponse.next();
     }
-
+    //rule 4
     if (!accessToken || !isValidAccessToken) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(loginUrl);
     }
+
+    // rule enforcing user to stay in reset password page if they need to change password
+    if (accessToken) {
+      const userInfo = await getUserInfo();
+      if (userInfo?.needPasswordChange) {
+        if (pathname !== "/reset-password") {
+          const resetPasswordUrl = new URL("/reset-password", request.url);
+          resetPasswordUrl.searchParams.set("email", userInfo.email);
+          return NextResponse.redirect(resetPasswordUrl);
+        }
+        return NextResponse.next();
+      }
+      if (
+        userInfo &&
+        !userInfo.needPasswordChange &&
+        pathname === "/reset-password"
+      ) {
+        return NextResponse.redirect(
+          new URL(getDefaultDashboardRoute(userRole as UserRole), request.url),
+        );
+      }
+    }
+    //rule 5
     if (routerOwner === "COMMON") {
       return NextResponse.next();
     }
+    //rule 6
     if (
       routerOwner === "ADMIN" ||
       routerOwner === "DOCTOR" ||
