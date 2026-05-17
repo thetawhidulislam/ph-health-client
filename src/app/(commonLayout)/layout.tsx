@@ -14,7 +14,6 @@ export default function CommonLayout({
 }>) {
   return (
     <>
-      <p>Common Layout</p>
       {children}
     </>
   );

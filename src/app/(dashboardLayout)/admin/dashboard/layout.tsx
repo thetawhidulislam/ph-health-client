@@ -7,7 +7,6 @@ export default function AdminDashboardLayout({
 }>) {
   return (
     <>
-      <p>Dashboard Layout</p>
       {children}
     </>
   );
