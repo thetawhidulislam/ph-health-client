@@ -10,7 +10,7 @@ const DashboardSidebar = async () => {
 
   const dashboardHome = getDefaultDashboardRoute(userInfo.role);
 
-  return <div>DashboardSidebars  </div>;
+  return <div>DashboardSidebar </div>;
 };
 
 export default DashboardSidebar;
