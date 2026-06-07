@@ -3,6 +3,7 @@ import { getNavItemsByRole } from "@/lib/navItems";
 import { getUserInfo } from "@/services/auth.service";
 import { NavSection } from "@/types/dashboard.type";
 import React from "react";
+import DashboardSidebarContent from "./DashboardSidebarContent";
 
 const DashboardSidebar = async () => {
   const userInfo = await getUserInfo();
@@ -10,7 +11,13 @@ const DashboardSidebar = async () => {
 
   const dashboardHome = getDefaultDashboardRoute(userInfo.role);
 
-  return <div>DashboardSidebar </div>;
+  return (
+    <DashboardSidebarContent
+      userInfo={userInfo}
+      navItems={navItems}
+      dashboardHome={dashboardHome}
+    />
+  );
 };
 
 export default DashboardSidebar;
