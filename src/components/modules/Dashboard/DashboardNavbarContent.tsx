@@ -9,6 +9,7 @@ import DashboardMobileSidebar from "./DashboardMobileSidebar";
 import { MenuIcon, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import NotificationDropdown from "./NotificationDropdown";
+import UserDropdown from "./UserDropdown";
 
 interface DashboardNavbarContentProps {
   userInfo: UserInfo;
@@ -25,10 +26,8 @@ const DashboardNavbarContent = ({
     <>
       {/* Mobile menu toggle icon */}
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger className="md:hidden">
-          <Button variant={"outline"} size="icon">
-            <MenuIcon className="w-4 h-4" />
-          </Button>
+        <SheetTrigger className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background text-sm text-foreground shadow-xs transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 hover:bg-muted disabled:pointer-events-none disabled:opacity-50">
+          <MenuIcon className="w-4 h-4" />
         </SheetTrigger>
         <SheetContent side="left" className="p-0 w-64">
           <DashboardMobileSidebar
@@ -53,6 +52,7 @@ const DashboardNavbarContent = ({
       <NotificationDropdown />
 
       {/* user dropdown */}
+      <UserDropdown userInfo={userInfo} />
     </>
   );
 };
