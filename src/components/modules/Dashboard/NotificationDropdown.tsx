@@ -1,7 +1,6 @@
 "use client"
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatDistanceToNow } from "date-fns";
@@ -72,18 +71,18 @@ const getNotificationIcon = (type : Notification["type"]) => {
 
 
 const NotificationDropdown = () => {
-
-    const unreadCount = MOCK_NOTIFICATIONS.filter(notification => !notification.read).length;
+  const unreadCount = MOCK_NOTIFICATIONS.filter((notification) => !notification.read).length;
   return (
     <DropdownMenu>
-        <DropdownMenuTrigger className="relative inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background text-foreground shadow-xs transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 hover:bg-muted disabled:pointer-events-none disabled:opacity-50">
-            <Bell className="h-5 w-5" />
-            <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center" variant={"destructive"}>
-                <span className="text-[10px]">
-                    {unreadCount > 9 ? "9+" : unreadCount}
-                </span>
-            </Badge>
-        </DropdownMenuTrigger>
+      <DropdownMenuTrigger className="relative inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background text-sm text-foreground shadow-xs transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 hover:bg-muted disabled:pointer-events-none disabled:opacity-50">
+        <Bell className="h-5 w-5" />
+        <Badge
+          className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center"
+          variant={"destructive"}
+        >
+          <span className="text-[10px]">{unreadCount > 9 ? "9+" : unreadCount}</span>
+        </Badge>
+      </DropdownMenuTrigger>
 
         <DropdownMenuContent align={"end"} className="w-80">
             <DropdownMenuLabel className="flex items-center justify-between">
