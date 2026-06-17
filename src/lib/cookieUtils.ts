@@ -8,7 +8,6 @@ export const setCookie = async (
   maxAgeInSeconds: number,
 ) => {
   const cookieStore = await cookies();
-
   cookieStore.set(name, value, {
     httpOnly: true,
     secure: true,

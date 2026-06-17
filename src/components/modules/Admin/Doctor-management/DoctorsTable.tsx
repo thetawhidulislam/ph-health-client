@@ -39,6 +39,7 @@ const DoctorsTable = () => {
     queryFn: getDoctors,
   });
   const { data: doctors } = doctorsDataResponse! || [];
+  // eslint-disable-next-line react-hooks/incompatible-library
   const { getHeaderGroups, getRowModel } = useReactTable({
     data: doctors || [],
     columns: doctorColumns,
