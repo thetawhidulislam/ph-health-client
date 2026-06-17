@@ -2,7 +2,7 @@ import { ApiResponse } from "@/types/api.types";
 import axios from "axios";
 import { isTokenExpiringSoon } from "../tokenUtils";
 import { cookies, headers } from "next/headers";
-import { getNewTokenWithRefreshToken } from "@/services/auth.service";
+import { getNewTokensWithRefreshToken } from "@/services/auth.service";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 if (!API_BASE_URL) {
@@ -20,7 +20,7 @@ async function tryRefreshToken(
     return;
   }
   try {
-    await getNewTokenWithRefreshToken(refreshToken);
+    await getNewTokensWithRefreshToken(refreshToken);
   } catch (error) {
     console.error("Error refreshing token:", error);
   }

@@ -4,8 +4,9 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import React from "react";
-import { getDoctors } from "./_action";
+
 import DoctorList from "@/components/modules/Consultation/DoctorList";
+import { getDoctors } from "@/services/doctor.service";
 
 const ConsultationPage = async () => {
   const queryClient = new QueryClient();

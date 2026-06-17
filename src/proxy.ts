@@ -7,14 +7,15 @@ import {
   UserRole,
 } from "./lib/authUtils";
 import {
-  getNewTokenWithRefreshToken,
+
+  getNewTokensWithRefreshToken,
   getUserInfo,
 } from "./services/auth.service";
 import { isTokenExpiringSoon } from "./lib/tokenUtils";
 
 async function refreshTokenMiddleware(refreshToken: string): Promise<boolean> {
   try {
-    const res = await getNewTokenWithRefreshToken(refreshToken);
+    const res = await getNewTokensWithRefreshToken(refreshToken);
     if (!res) {
       return false;
     }
