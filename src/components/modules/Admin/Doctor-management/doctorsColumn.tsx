@@ -34,6 +34,7 @@ export const doctorColumns: ColumnDef<IDoctor>[] = [
   {
     id: "specialties",
     accessorKey: "specialities",
+    enableSorting: false,
     header: "Specialties",
     cell: ({ row }) => {
       const specialties = row.original.specialities;

@@ -13,10 +13,7 @@ const DoctorsManagementPage = async ({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
   const queryParamsObject = await searchParams;
-  // const queryString = Object.keys(queryParamsObject)
-  //   .map((key) => `${key}=${queryParamsObject[key]}`)
-  //   .join("&");
-  const queyrString = Object.keys(queryParamsObject)
+  const queryString = Object.keys(queryParamsObject)
     .map((key) => {
       const value = queryParamsObject[key];
       if (Array.isArray(value)) {
@@ -29,17 +26,14 @@ const DoctorsManagementPage = async ({
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["doctors", queryParamsObject],
-    queryFn: () => getDoctors(queyrString),
+    queryKey: ["doctors", queryString],
+    queryFn: () => getDoctors(queryString),
     staleTime: 1000 * 60 * 60, // 1 hour
     gcTime: 1000 * 60 * 60, // 1 hour
   });
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <DoctorsTable
-        queyrString={queyrString}
-        queryParamsObject={queryParamsObject}
-      />
+      <DoctorsTable queryString={queryString} />
     </HydrationBoundary>
   );
 };
