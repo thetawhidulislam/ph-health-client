@@ -18,10 +18,12 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ArrowUpDown, MoreHorizontal } from "lucide-react";
+import TablePagination from "./TablePagination";
 
 interface DataTableAction<TData> {
   onView?: (data: TData) => void;
@@ -39,6 +41,15 @@ interface DataTableProps<TData> {
     state: SortingState;
     onSortingChange: (state: SortingState) => void;
   };
+  pagination?: {
+    pageIndex: number;
+    pageSize: number;
+    pageCount: number;
+    total?: number;
+    pageSizeOptions?: number[];
+    onPageChange: (pageIndex: number) => void;
+    onPageSizeChange: (pageSize: number) => void;
+  };
 }
 
 const DataTable = <TData,>({
@@ -48,6 +59,7 @@ const DataTable = <TData,>({
   emptyMesssage,
   isLoading,
   sorting,
+  pagination,
 }: DataTableProps<TData>) => {
   const tableColumns: ColumnDef<TData>[] = actions
     ? [
@@ -91,13 +103,24 @@ const DataTable = <TData,>({
     : columns;
 
   // eslint-disable-next-line react-hooks/incompatible-library
-  const { getHeaderGroups, getRowModel } = useReactTable({
+  const table = useReactTable({
     data,
     columns: tableColumns,
     getCoreRowModel: getCoreRowModel(),
     manualSorting: !!sorting,
+    manualPagination: !!pagination,
+    pageCount: pagination?.pageCount,
+    getPaginationRowModel: getPaginationRowModel(),
     state: {
       ...(sorting ? { sorting: sorting.state } : {}),
+      ...(pagination
+        ? {
+            pagination: {
+              pageIndex: pagination.pageIndex,
+              pageSize: pagination.pageSize,
+            },
+          }
+        : {}),
     },
     onSortingChange: sorting
       ? (updater) => {
@@ -109,7 +132,28 @@ const DataTable = <TData,>({
           sorting.onSortingChange(nextSortingState);
         }
       : undefined,
+    onPaginationChange: pagination
+      ? (updater) => {
+          const currentPagination = {
+            pageIndex: pagination.pageIndex,
+            pageSize: pagination.pageSize,
+          };
+          const nextPagination =
+            typeof updater === "function"
+              ? updater(currentPagination)
+              : updater;
+
+          if (nextPagination.pageIndex !== pagination.pageIndex) {
+            pagination.onPageChange(nextPagination.pageIndex);
+          }
+          if (nextPagination.pageSize !== pagination.pageSize) {
+            pagination.onPageSizeChange(nextPagination.pageSize);
+          }
+        }
+      : undefined,
   });
+  const headerGroups = table.getHeaderGroups();
+  const rowModel = table.getRowModel();
   return (
     <div className="relative">
       {isLoading && (
@@ -123,7 +167,7 @@ const DataTable = <TData,>({
       <div className="rounded-lg border">
         <Table>
           <TableHeader>
-            {getHeaderGroups().map((headerGroup) => (
+            {headerGroups.map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead key={header.id}>
@@ -159,8 +203,8 @@ const DataTable = <TData,>({
           </TableHeader>
 
           <TableBody>
-            {getRowModel().rows.length ? (
-              getRowModel().rows.map((row) => (
+            {rowModel.rows.length ? (
+              rowModel.rows.map((row) => (
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableHead key={cell.id}>
@@ -185,6 +229,17 @@ const DataTable = <TData,>({
           </TableBody>
         </Table>
       </div>
+      {pagination && (
+        <TablePagination
+          pageIndex={pagination.pageIndex}
+          pageSize={pagination.pageSize}
+          pageCount={pagination.pageCount}
+          total={pagination.total}
+          pageSizeOptions={pagination.pageSizeOptions}
+          onPageChange={pagination.onPageChange}
+          onPageSizeChange={pagination.onPageSizeChange}
+        />
+      )}
     </div>
   );
 };

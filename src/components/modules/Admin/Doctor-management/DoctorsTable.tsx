@@ -1,20 +1,17 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useMemo, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 import DataTable from "@/components/shared/table/DataTable";
 
 import { getDoctors } from "@/services/doctor.service";
 import { IDoctor } from "@/types/doctor.types";
 
+import { ApiResponse } from "@/types/api.types";
 import { useQuery } from "@tanstack/react-query";
 import { SortingState } from "@tanstack/react-table";
 import { doctorColumns } from "./doctorsColumn";
 
-const DoctorsTable = ({
-  queryString,
-}: {
-  queryString: string;
-}) => {
+const DoctorsTable = ({ queryString }: { queryString: string }) => {
   // const doctorColumns: ColumnDef<IDoctor>[] = [
   //   { accessorKey: "name", header: "Name" },
   //   { accessorKey: "specialization", header: "Specialization" },
@@ -35,45 +32,52 @@ const DoctorsTable = ({
     console.log("Delete doctor:", doctor);
   };
 
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const initialQueryString = searchParams.toString() || queryString;
 
-  const [sortingState, setSortingState] = useState<SortingState>([]);
-  const [localQueryString, setLocalQueryString] = useState<string>(queryString || "");
+  const [queryStringState, setQueryStringState] = useState<string>(initialQueryString);
 
-  const normalizedQueryString = useMemo(() => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (!params.get("sortBy")) {
-      params.delete("sortOrder");
-    }
-    return params.toString();
-  }, [searchParams]);
+  const effectiveQueryString = queryStringState;
+  const effectiveSearchParams = useMemo(
+    () => new URLSearchParams(effectiveQueryString),
+    [effectiveQueryString],
+  );
 
-  useEffect(() => {
-    const sortBy = searchParams.get("sortBy");
-    const sortOrder = searchParams.get("sortOrder");
+  const sortBy = effectiveSearchParams.get("sortBy");
+  const sortOrder = effectiveSearchParams.get("sortOrder");
+  const page = Math.max(1, Number(effectiveSearchParams.get("page") || "1"));
+  const limit = Math.max(1, Number(effectiveSearchParams.get("limit") || "10"));
 
+  const sortingState = useMemo(() => {
     if (!sortBy) {
-      
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSortingState([]);
-    } else {
-      setSortingState([
-        {
-          id: sortBy,
-          desc: sortOrder === "desc",
-        },
-      ]);
+      return [] as SortingState;
     }
 
-    setLocalQueryString(normalizedQueryString);
-  }, [normalizedQueryString, searchParams]);
+    return [
+      {
+        id: sortBy,
+        desc: sortOrder === "desc",
+      },
+    ];
+  }, [sortBy, sortOrder]);
+
+  const pageIndex = page - 1;
+  const pageSize = limit;
+
+  const navigateToDestination = (destination: string) => {
+    if (typeof window !== "undefined") {
+      const currentPath = `${window.location.pathname}${window.location.search}`;
+      if (currentPath !== destination) {
+        window.history.replaceState(null, "", destination);
+      }
+    }
+
+    setQueryStringState(destination.replace(/^[^?]*\??/, ""));
+  };
 
   const handleSortingChange = (nextState: SortingState) => {
-    setSortingState(nextState);
-
-    const nextParams = new URLSearchParams(searchParams.toString());
+    const nextParams = new URLSearchParams(queryStringState);
 
     if (nextState.length === 0) {
       nextParams.delete("sortBy");
@@ -84,22 +88,48 @@ const DoctorsTable = ({
       nextParams.set("sortOrder", nextSort.desc ? "desc" : "asc");
     }
 
-    const nextQueryString = nextParams.toString();
-    setLocalQueryString(nextQueryString);
-
-    const destination = `${pathname}${nextQueryString ? `?${nextQueryString}` : ""}`;
-    router.replace(destination, { scroll: false });
+    const destination = `${pathname}${nextParams.toString() ? `?${nextParams.toString()}` : ""}`;
+    void navigateToDestination(destination);
   };
 
-  const { data: doctorsResponse, isFetching, isLoading } = useQuery({
-    queryKey: ["doctors", localQueryString],
-    queryFn: () => getDoctors(localQueryString),
+  const handlePageChange = (nextPageIndex: number) => {
+    const nextParams = new URLSearchParams(queryStringState);
+    nextParams.set("page", String(nextPageIndex + 1));
+
+    const destination = `${pathname}${nextParams.toString() ? `?${nextParams.toString()}` : ""}`;
+    void navigateToDestination(destination);
+  };
+
+  const handlePageSizeChange = (nextSize: number) => {
+    const nextParams = new URLSearchParams(queryStringState);
+    nextParams.set("limit", String(nextSize));
+    nextParams.set("page", "1");
+
+    const destination = `${pathname}${nextParams.toString() ? `?${nextParams.toString()}` : ""}`;
+    void navigateToDestination(destination);
+  };
+
+  const { data: doctorsResponseRaw, isFetching, isLoading } = useQuery<ApiResponse<IDoctor[]>>({
+    queryKey: ["doctors", effectiveQueryString],
+    queryFn: () => getDoctors(effectiveQueryString),
+    staleTime: 1000 * 60,
   });
+  const doctorsResponse = doctorsResponseRaw as ApiResponse<IDoctor[]> | undefined;
   const doctors = doctorsResponse?.data || [];
+  const meta = doctorsResponse?.meta;
+  const pageCount = meta?.totalPage ?? Math.max(1, Math.ceil((meta?.total ?? 0) / pageSize));
   const tableLoading = isLoading || isFetching;
 
   return (
-    <div>
+    <div className="relative">
+      {tableLoading && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/60 backdrop-blur-sm">
+          <div className="flex items-center gap-2 rounded-md bg-muted px-4 py-3 text-sm text-muted-foreground shadow-lg">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+            Loading...
+          </div>
+        </div>
+      )}
       <DataTable
         data={doctors || []}
         columns={doctorColumns}
@@ -113,6 +143,15 @@ const DoctorsTable = ({
         sorting={{
           state: sortingState,
           onSortingChange: handleSortingChange,
+        }}
+        pagination={{
+          pageIndex,
+          pageSize,
+          pageCount,
+          total: meta?.total,
+          pageSizeOptions: [1, 10, 20, 30, 50, 100],
+          onPageChange: handlePageChange,
+          onPageSizeChange: handlePageSizeChange,
         }}
       />
     </div>

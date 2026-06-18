@@ -23,6 +23,8 @@ export const doctorColumns: ColumnDef<IDoctor>[] = [
   {
     id: "contactNumber",
     accessorKey: "contactNumber",
+    enableSorting: false,
+
     header: "Contact",
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-muted-foreground">
