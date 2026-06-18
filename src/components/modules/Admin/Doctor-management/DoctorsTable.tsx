@@ -7,7 +7,13 @@ import { IDoctor } from "@/types/doctor.types";
 import { useQuery } from "@tanstack/react-query";
 import { doctorColumns } from "./doctorsColumn";
 
-const DoctorsTable = () => {
+const DoctorsTable = ({
+  queyrString,
+  queryParamsObject,
+}: {
+  queyrString: string;
+  queryParamsObject: { [key: string]: string | string[] | undefined };
+}) => {
   // const doctorColumns: ColumnDef<IDoctor>[] = [
   //   { accessorKey: "name", header: "Name" },
   //   { accessorKey: "specialization", header: "Specialization" },
@@ -28,8 +34,8 @@ const DoctorsTable = () => {
     console.log("Delete doctor:", doctor);
   };
   const { data: doctorsDataResponse, isLoading } = useQuery({
-    queryKey: ["doctors"],
-    queryFn: getDoctors,
+    queryKey: ["doctors", queryParamsObject],
+    queryFn: () => getDoctors(queyrString),
   });
   const { data: doctors } = doctorsDataResponse! || [];
 

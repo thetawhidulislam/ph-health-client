@@ -33,30 +33,27 @@ export const doctorColumns: ColumnDef<IDoctor>[] = [
   },
   {
     id: "specialties",
-    accessorKey: "specialties",
+    accessorKey: "specialities",
     header: "Specialties",
     cell: ({ row }) => {
-      const specialties = row.original.specialties;
+      const specialties = row.original.specialities;
+
       if (!specialties || specialties.length === 0) {
         return (
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <span>No specialties listed</span>
-          </div>
+          <span className="text-xs text-muted-foreground">No Specialties</span>
         );
       }
+
       return (
-        <div className="flex items-center gap-2 text-muted-foreground">
-          <BriefcaseMedical className="h-4 w-4" />
-          <span>
-            {specialties
-              .map(({ specialty }, id) => {
-                const title = specialty?.title || "N/A";
-                <Badge key={id} variant="secondary">
-                  {title}
-                </Badge>;
-              })
-              .join(", ")}
-          </span>
+        <div>
+          {specialties.map(({ specialty }, id) => {
+            const title = specialty.title || "N/A";
+            return (
+              <Badge variant={"secondary"} key={id}>
+                {title}
+              </Badge>
+            );
+          })}
         </div>
       );
     },

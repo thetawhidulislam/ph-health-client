@@ -7,18 +7,39 @@ import {
 } from "@tanstack/react-query";
 import React from "react";
 
-const DoctorsManagementPage = async () => {
+const DoctorsManagementPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) => {
+  const queryParamsObject = await searchParams;
+  // const queryString = Object.keys(queryParamsObject)
+  //   .map((key) => `${key}=${queryParamsObject[key]}`)
+  //   .join("&");
+  const queyrString = Object.keys(queryParamsObject)
+    .map((key) => {
+      const value = queryParamsObject[key];
+      if (Array.isArray(value)) {
+        return value.map((v) => `${key}=${v}`).join("&");
+      }
+      return `${key}=${value}`;
+    })
+    .join("&");
+
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["doctors"],
-    queryFn: getDoctors,
+    queryKey: ["doctors", queryParamsObject],
+    queryFn: () => getDoctors(queyrString),
     staleTime: 1000 * 60 * 60, // 1 hour
     gcTime: 1000 * 60 * 60, // 1 hour
   });
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <DoctorsTable />
+      <DoctorsTable
+        queyrString={queyrString}
+        queryParamsObject={queryParamsObject}
+      />
     </HydrationBoundary>
   );
 };

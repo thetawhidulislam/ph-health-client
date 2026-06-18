@@ -29,7 +29,7 @@ export interface IDoctor {
   user: {
     status: UserStatus;
   };
-  specialties: Array<{
+  specialities: Array<{
     specialtyId: string;
     doctorId: string;
     specialty: {
