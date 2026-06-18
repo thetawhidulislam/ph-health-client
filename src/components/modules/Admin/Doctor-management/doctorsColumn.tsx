@@ -4,9 +4,11 @@ import { Star, Phone, CalendarDays, BriefcaseMedical } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import DateCell from "@/components/shared/cell/DateCell";
 import UserInfoCell from "@/components/shared/cell/UserInfoCell";
+import StatusBadgeCell from "@/components/shared/cell/StatusBadgeCell";
 
 export const doctorColumns: ColumnDef<IDoctor>[] = [
   {
+    id: "name",
     accessorKey: "name",
     header: "Doctor",
     cell: ({ row }) => (
@@ -19,6 +21,7 @@ export const doctorColumns: ColumnDef<IDoctor>[] = [
   },
 
   {
+    id: "contactNumber",
     accessorKey: "contactNumber",
     header: "Contact",
     cell: ({ row }) => (
@@ -28,8 +31,40 @@ export const doctorColumns: ColumnDef<IDoctor>[] = [
       </div>
     ),
   },
+  {
+    id: "specialties",
+    accessorKey: "specialties",
+    header: "Specialties",
+    cell: ({ row }) => {
+      const specialties = row.original.specialties;
+      if (!specialties || specialties.length === 0) {
+        return (
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <span>No specialties listed</span>
+          </div>
+        );
+      }
+      return (
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <BriefcaseMedical className="h-4 w-4" />
+          <span>
+            {specialties
+              .map(({ specialty }, id) => {
+                const title = specialty?.title || "N/A";
+                <Badge key={id} variant="secondary">
+                  {title}
+                </Badge>;
+              })
+              .join(", ")}
+          </span>
+        </div>
+      );
+    },
+  },
 
   {
+    id: "appointmentFee",
+
     accessorKey: "appointmentFee",
     header: "Fee",
     cell: ({ row }) => (
@@ -40,6 +75,8 @@ export const doctorColumns: ColumnDef<IDoctor>[] = [
   },
 
   {
+    id: "experience",
+
     accessorKey: "experience",
     header: "Experience",
     cell: ({ row }) => (
@@ -51,6 +88,7 @@ export const doctorColumns: ColumnDef<IDoctor>[] = [
   },
 
   {
+    id: "averageRating",
     accessorKey: "averageRating",
     header: "Rating",
     cell: ({ row }) => (
@@ -64,6 +102,7 @@ export const doctorColumns: ColumnDef<IDoctor>[] = [
   },
 
   {
+    id: "gender",
     accessorKey: "gender",
     header: "Gender",
     cell: ({ row }) => (
@@ -82,6 +121,13 @@ export const doctorColumns: ColumnDef<IDoctor>[] = [
   },
 
   {
+    id: "status",
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => <StatusBadgeCell status={row.original.user.status} />,
+  },
+  {
+    id: "createdAt",
     accessorKey: "createdAt",
     header: "Joined",
     cell: ({ row }) => (
