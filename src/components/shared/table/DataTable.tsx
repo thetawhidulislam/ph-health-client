@@ -24,6 +24,7 @@ import {
 } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ArrowUpDown, MoreHorizontal } from "lucide-react";
 import TablePagination from "./TablePagination";
+import TableSearch from "./TableSearch";
 
 interface DataTableAction<TData> {
   onView?: (data: TData) => void;
@@ -50,6 +51,14 @@ interface DataTableProps<TData> {
     onPageChange: (pageIndex: number) => void;
     onPageSizeChange: (pageSize: number) => void;
   };
+  search?: {
+    value: string;
+    onSearchChange: (value: string) => void;
+    onSearchClear: () => void;
+    placeholder?: string;
+    disabled?: boolean;
+    debounceMs?: number;
+  };
 }
 
 const DataTable = <TData,>({
@@ -60,6 +69,7 @@ const DataTable = <TData,>({
   isLoading,
   sorting,
   pagination,
+  search,
 }: DataTableProps<TData>) => {
   const tableColumns: ColumnDef<TData>[] = actions
     ? [
@@ -164,6 +174,18 @@ const DataTable = <TData,>({
           </div>
         </div>
       )}
+      {search ? (
+        <div className="mb-4 flex w-full flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <TableSearch
+            key={search.value || "table-search"}
+            value={search.value}
+            onSearchChange={search.onSearchChange}
+            onSearchClear={search.onSearchClear}
+            placeholder={search.placeholder}
+            disabled={search.disabled}
+          />
+        </div>
+      ) : null}
       <div className="rounded-lg border">
         <Table>
           <TableHeader>

@@ -1,5 +1,6 @@
 import DoctorsTable from "@/components/modules/Admin/Doctor-management/DoctorsTable";
 import { getDoctors } from "@/services/doctor.service";
+import { getSpecialities } from "@/services/speciality.service";
 import {
   dehydrate,
   HydrationBoundary,
@@ -31,6 +32,14 @@ const DoctorsManagementPage = async ({
     staleTime: 1000 * 60 * 60, // 1 hour
     gcTime: 1000 * 60 * 60, // 1 hour
   });
+
+  await queryClient.prefetchQuery({
+    queryKey: ["specialities"],
+    queryFn: getSpecialities,
+    staleTime: 1000 * 60 * 60,
+    gcTime: 1000 * 60 * 60,
+  });
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <DoctorsTable queryString={queryString} />

@@ -1,6 +1,7 @@
 "use client";
 
-import { getDoctors } from "@/app/(commonLayout)/consultation/_action";
+
+import { getDoctors } from "@/services/doctor.service";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
@@ -9,7 +10,6 @@ const DoctorList = () => {
     queryKey: ["doctors"],
     queryFn: () => getDoctors(),
   });
-  console.log(data);
   return <div>DoctorListss </div>;
 };
 
