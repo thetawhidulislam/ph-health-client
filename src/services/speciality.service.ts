@@ -2,7 +2,7 @@
 
 import { AxiosError } from "axios";
 import { httpClient } from "@/lib/axios/httpClient";
-import { ISpeciality } from "@/types/speciality.types";
+import { ISpecialty } from "@/types/speciality.types";
 
 const specialityEndpoints = [
   "/specialties",
@@ -12,7 +12,7 @@ const specialityEndpoints = [
 ];
 
 async function fetchSpecialities(path: string) {
-  return await httpClient.get<ISpeciality[]>(path);
+  return await httpClient.get<ISpecialty[]>(path);
 }
 
 export async function getSpecialities() {
