@@ -70,9 +70,8 @@ const SchedulesTable = ({
     queryFn: () => getSchedules(queryString),
   });
 
-  const schedules = schedulesResponse?.data?.data ?? [];
-  const meta: PaginationMeta | undefined = schedulesResponse?.data?.meta;
-
+  const schedules = schedulesResponse?.data ?? [];
+  const meta: PaginationMeta | undefined = schedulesResponse?.meta;
 
   return (
     <>
