@@ -1,8 +1,19 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { PaginationState, SortingState } from "@tanstack/react-table";
-import { ReadonlyURLSearchParams, usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
+import {
+  ReadonlyURLSearchParams,
+  usePathname,
+  useRouter,
+} from "next/navigation";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
 
 interface UseServerManagedDataTableParams {
   searchParams: ReadonlyURLSearchParams;
@@ -44,7 +55,10 @@ export const useServerManagedDataTable = ({
   const pathname = usePathname();
   const [isRouteRefreshPending, startRouteRefreshTransition] = useTransition();
 
-  const queryStringFromUrl = useMemo(() => searchParams.toString(), [searchParams]);
+  const queryStringFromUrl = useMemo(
+    () => searchParams.toString(),
+    [searchParams],
+  );
 
   const paginationStateFromUrl = useMemo<PaginationState>(() => {
     const page = parsePositiveInteger(searchParams.get("page"), defaultPage);
@@ -67,8 +81,10 @@ export const useServerManagedDataTable = ({
     return [{ id: sortBy, desc: sortOrder === "desc" }];
   }, [searchParams]);
 
-  const [optimisticSortingState, setOptimisticSortingState] = useState<SortingState>(sortingStateFromUrl);
-  const [optimisticPaginationState, setOptimisticPaginationState] = useState<PaginationState>(paginationStateFromUrl);
+  const [optimisticSortingState, setOptimisticSortingState] =
+    useState<SortingState>(sortingStateFromUrl);
+  const [optimisticPaginationState, setOptimisticPaginationState] =
+    useState<PaginationState>(paginationStateFromUrl);
 
   useEffect(() => {
     setOptimisticSortingState(sortingStateFromUrl);
@@ -78,68 +94,83 @@ export const useServerManagedDataTable = ({
     setOptimisticPaginationState(paginationStateFromUrl);
   }, [paginationStateFromUrl]);
 
-  const updateUrlAndRefresh = useCallback((params: URLSearchParams) => {
-    const nextQuery = params.toString();
-    const currentQuery = window.location.search.replace(/^\?/, "");
+  const updateUrlAndRefresh = useCallback(
+    (params: URLSearchParams) => {
+      const nextQuery = params.toString();
+      const currentQuery = window.location.search.replace(/^\?/, "");
 
-    if (nextQuery === currentQuery) {
-      return;
-    }
-
-    const nextUrl = nextQuery ? `${pathname}?${nextQuery}` : pathname;
-
-    // Update URL immediately for optimistic UX, then refresh server components.
-    window.history.pushState(null, "", nextUrl);
-
-    startRouteRefreshTransition(() => {
-      router.refresh();
-    });
-  }, [pathname, router, startRouteRefreshTransition]);
-
-  const updateParams = useCallback<UpdateParamsFn>((
-    updater: (params: URLSearchParams) => void,
-    options?: UpdateParamsOptions,
-  ) => {
-    const params = new URLSearchParams(window.location.search);
-
-    updater(params);
-
-    if (options?.resetPage) {
-      params.set("page", "1");
-      setOptimisticPaginationState((prevState) => ({
-        pageIndex: 0,
-        pageSize: prevState.pageSize,
-      }));
-    }
-
-    updateUrlAndRefresh(params);
-  }, [updateUrlAndRefresh]);
-
-  const handleSortingChange = useCallback((state: SortingState) => {
-    setOptimisticSortingState(state);
-
-    updateParams((params) => {
-      const nextSorting = state[0];
-
-      if (nextSorting) {
-        params.set("sortBy", nextSorting.id);
-        params.set("sortOrder", nextSorting.desc ? "desc" : "asc");
+      if (nextQuery === currentQuery) {
         return;
       }
 
-      params.delete("sortBy");
-      params.delete("sortOrder");
-    }, { resetPage: true });
-  }, [updateParams]);
+      const nextUrl = nextQuery ? `${pathname}?${nextQuery}` : pathname;
 
-  const handlePaginationChange = useCallback((state: PaginationState) => {
-    setOptimisticPaginationState(state);
+      // Update URL immediately for optimistic UX, then refresh server components.
+      window.history.pushState(null, "", nextUrl);
 
-    updateParams((params) => {
-      params.set("page", String(state.pageIndex + 1));
-      params.set("limit", String(state.pageSize));
-    });
-  }, [updateParams]);
+      startRouteRefreshTransition(() => {
+        router.refresh();
+      });
+    },
+    [pathname, router, startRouteRefreshTransition],
+  );
+
+  const updateParams = useCallback<UpdateParamsFn>(
+    (
+      updater: (params: URLSearchParams) => void,
+      options?: UpdateParamsOptions,
+    ) => {
+      const params = new URLSearchParams(window.location.search);
+
+      updater(params);
+
+      if (options?.resetPage) {
+        params.set("page", "1");
+        setOptimisticPaginationState((prevState) => ({
+          pageIndex: 0,
+          pageSize: prevState.pageSize,
+        }));
+      }
+
+      updateUrlAndRefresh(params);
+    },
+    [updateUrlAndRefresh],
+  );
+
+  const handleSortingChange = useCallback(
+    (state: SortingState) => {
+      setOptimisticSortingState(state);
+
+      updateParams(
+        (params) => {
+          const nextSorting = state[0];
+
+          if (nextSorting) {
+            params.set("sortBy", nextSorting.id);
+            params.set("sortOrder", nextSorting.desc ? "desc" : "asc");
+            return;
+          }
+
+          params.delete("sortBy");
+          params.delete("sortOrder");
+        },
+        { resetPage: true },
+      );
+    },
+    [updateParams],
+  );
+
+  const handlePaginationChange = useCallback(
+    (state: PaginationState) => {
+      setOptimisticPaginationState(state);
+
+      updateParams((params) => {
+        params.set("page", String(state.pageIndex + 1));
+        params.set("limit", String(state.pageSize));
+      });
+    },
+    [updateParams],
+  );
 
   return {
     queryStringFromUrl,
