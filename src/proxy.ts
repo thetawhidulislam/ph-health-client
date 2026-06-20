@@ -7,7 +7,6 @@ import {
   UserRole,
 } from "./lib/authUtils";
 import {
-
   getNewTokensWithRefreshToken,
   getUserInfo,
 } from "./services/auth.service";
@@ -53,6 +52,16 @@ export async function proxy(request: NextRequest) {
 
     const isAuth = isAuthRoute(pathname);
 
+    if (
+      isAuth &&
+      isValidAccessToken &&
+      pathname !== "/verify-email" &&
+      pathname !== "/reset-password"
+    ) {
+      return NextResponse.redirect(
+        new URL(getDefaultDashboardRoute(userRole as UserRole), request.url),
+      );
+    }
     if (
       isValidAccessToken &&
       refreshToken &&
