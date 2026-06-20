@@ -75,9 +75,18 @@ const httpPost = async <TData>(
 ): Promise<ApiResponse<TData>> => {
   try {
     const instance = await axiosInstance();
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      ...options?.headers,
+    };
+
+    if (typeof FormData !== "undefined" && data instanceof FormData) {
+      delete headers["Content-Type"];
+    }
+
     const response = await instance.post<ApiResponse<TData>>(endpoint, data, {
       params: options?.params,
-      headers: options?.headers,
+      headers,
     });
     return response.data;
   } catch (error) {

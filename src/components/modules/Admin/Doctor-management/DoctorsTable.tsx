@@ -1,266 +1,207 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+
 import DataTable from "@/components/shared/table/DataTable";
-import TableFilters from "@/components/shared/table/TableFilters";
+import {
+  DataTableFilterConfig,
+  DataTableFilterValues,
+} from "@/components/shared/table/DataTableFilters";
+import {
+  serverManagedFilter,
+  useServerManagedDataTableFilters,
+} from "@/hooks/seServerManagedDataTableFilters";
+import { useRowActionModalState } from "@/hooks/useRowActionModalState";
+import { useServerManagedDataTable } from "@/hooks/useServerManagedDataTable";
+import { useServerManagedDataTableSearch } from "@/hooks/useServerManagedDataTableSearch";
+import { getAllSpecialties, getDoctors } from "@/services/doctor.service";
 
-import { getDoctors } from "@/services/doctor.service";
+import { PaginationMeta } from "@/types/api.types";
 import { IDoctor } from "@/types/doctor.types";
+import { ISpecialty } from "@/types/speciality.types";
 
-import { ApiResponse } from "@/types/api.types";
 import { useQuery } from "@tanstack/react-query";
-import { SortingState } from "@tanstack/react-table";
+import { useSearchParams } from "next/navigation";
+import { useMemo } from "react";
 import { doctorColumns } from "./doctorsColumn";
+import CreateDoctorFormModal from "./CreateDoctorFormModal";
+import EditDoctorFormModal from "./EditDoctorFormModal";
+import ViewDoctorProfileDialog from "./ViewDoctorProfileDialog";
+import DeleteDoctorConfirmationDialog from "./DeleteDoctorConfirmationDialog";
 
-const DoctorsTable = ({ queryString }: { queryString: string }) => {
-  const handleView = (doctor: IDoctor) => {
-    // Implement view logic here
-    console.log("View doctor:", doctor);
-  };
-  const handleEdit = (doctor: IDoctor) => {
-    // Implement edit logic here
-    console.log("Edit doctor:", doctor);
-  };
-  const handleDelete = (doctor: IDoctor) => {
-    // Implement delete logic here
-    console.log("Delete doctor:", doctor);
-  };
+const DEFAULT_PAGE = 1;
+const DEFAULT_LIMIT = 10;
+const SPECIALTIES_FILTER_KEY = "specialties.specialty.title";
+const APPOINTMENT_FEE_FILTER_KEY = "appointmentFee";
+const DOCTOR_FILTER_DEFINITIONS = [
+  serverManagedFilter.single("gender"),
+  serverManagedFilter.multi(SPECIALTIES_FILTER_KEY),
+  serverManagedFilter.range(APPOINTMENT_FEE_FILTER_KEY),
+];
 
-  const pathname = usePathname();
+const DoctorsTable = ({
+  initialQueryString,
+}: {
+  initialQueryString: string;
+}) => {
   const searchParams = useSearchParams();
-  const initialQueryString = searchParams.toString() || queryString;
-
-  const [queryStringState, setQueryStringState] =
-    useState<string>(initialQueryString);
-
-  useEffect(() => {
-    setQueryStringState(searchParams.toString() || queryString);
-  }, [searchParams, queryString]);
-
-  const effectiveQueryString = queryStringState;
-  const effectiveSearchParams = useMemo(
-    () => new URLSearchParams(effectiveQueryString),
-    [effectiveQueryString],
-  );
-
-  const sortBy = effectiveSearchParams.get("sortBy");
-  const sortOrder = effectiveSearchParams.get("sortOrder");
-  const searchTerm = effectiveSearchParams.get("searchTerm") ?? "";
-  const gender = effectiveSearchParams.get("gender") ?? "";
-  const appointmentFeeGte = effectiveSearchParams.get("appointmentFee[gte]") ?? "";
-  const appointmentFeeLte = effectiveSearchParams.get("appointmentFee[lte]") ?? "";
-  const page = Math.max(1, Number(effectiveSearchParams.get("page") || "1"));
-  const limit = Math.max(1, Number(effectiveSearchParams.get("limit") || "10"));
-
-  const sortingState = useMemo(() => {
-    if (!sortBy) {
-      return [] as SortingState;
-    }
-
-    return [
-      {
-        id: sortBy,
-        desc: sortOrder === "desc",
-      },
-    ];
-  }, [sortBy, sortOrder]);
-
-  const pageIndex = page - 1;
-  const pageSize = limit;
-
-  const navigateToDestination = (destination: string) => {
-    if (typeof window !== "undefined") {
-      const currentPath = `${window.location.pathname}${window.location.search}`;
-      if (currentPath !== destination) {
-        window.history.replaceState(null, "", destination);
-      }
-    }
-
-    setQueryStringState(destination.replace(/^[^?]*\??/, ""));
-  };
-
-  const handleSortingChange = (nextState: SortingState) => {
-    const nextParams = new URLSearchParams(queryStringState);
-
-    if (nextState.length === 0) {
-      nextParams.delete("sortBy");
-      nextParams.delete("sortOrder");
-    } else {
-      const nextSort = nextState[0];
-      nextParams.set("sortBy", String(nextSort.id));
-      nextParams.set("sortOrder", nextSort.desc ? "desc" : "asc");
-    }
-
-    const destination = `${pathname}${nextParams.toString() ? `?${nextParams.toString()}` : ""}`;
-    void navigateToDestination(destination);
-  };
-
-  const handlePageChange = (nextPageIndex: number) => {
-    const nextParams = new URLSearchParams(queryStringState);
-    nextParams.set("page", String(nextPageIndex + 1));
-
-    const destination = `${pathname}${nextParams.toString() ? `?${nextParams.toString()}` : ""}`;
-    void navigateToDestination(destination);
-  };
-
-  const handlePageSizeChange = (nextSize: number) => {
-    const nextParams = new URLSearchParams(queryStringState);
-    nextParams.set("limit", String(nextSize));
-    nextParams.set("page", "1");
-
-    const destination = `${pathname}${nextParams.toString() ? `?${nextParams.toString()}` : ""}`;
-    void navigateToDestination(destination);
-  };
-
-  const handleSearchChange = (nextSearchTerm: string) => {
-    const nextParams = new URLSearchParams(queryStringState);
-    if (nextSearchTerm) {
-      nextParams.set("searchTerm", nextSearchTerm.trim());
-    } else {
-      nextParams.delete("searchTerm");
-    }
-
-    nextParams.set("page", "1");
-    const destination = `${pathname}${nextParams.toString() ? `?${nextParams.toString()}` : ""}`;
-    void navigateToDestination(destination);
-  };
-
-  const handleSearchClear = () => {
-    const nextParams = new URLSearchParams(queryStringState);
-    nextParams.delete("searchTerm");
-    nextParams.set("page", "1");
-
-    const destination = `${pathname}${nextParams.toString() ? `?${nextParams.toString()}` : ""}`;
-    void navigateToDestination(destination);
-  };
-
-  const handleGenderApply = (nextGender: string) => {
-    const nextParams = new URLSearchParams(queryStringState);
-
-    if (nextGender) {
-      nextParams.set("gender", nextGender);
-    } else {
-      nextParams.delete("gender");
-    }
-
-    nextParams.set("page", "1");
-    const destination = `${pathname}${nextParams.toString() ? `?${nextParams.toString()}` : ""}`;
-    void navigateToDestination(destination);
-  };
-
-  const handleAppointmentFeeApply = (min: string, max: string) => {
-    const nextParams = new URLSearchParams(queryStringState);
-
-    if (min) {
-      nextParams.set("appointmentFee[gte]", min);
-    } else {
-      nextParams.delete("appointmentFee[gte]");
-    }
-
-    if (max) {
-      nextParams.set("appointmentFee[lte]", max);
-    } else {
-      nextParams.delete("appointmentFee[lte]");
-    }
-
-    nextParams.set("page", "1");
-    const destination = `${pathname}${nextParams.toString() ? `?${nextParams.toString()}` : ""}`;
-    void navigateToDestination(destination);
-  };
-
-  const handleAppointmentFeeClear = () => {
-    const nextParams = new URLSearchParams(queryStringState);
-    nextParams.delete("appointmentFee[gte]");
-    nextParams.delete("appointmentFee[lte]");
-    nextParams.set("page", "1");
-
-    const destination = `${pathname}${nextParams.toString() ? `?${nextParams.toString()}` : ""}`;
-    void navigateToDestination(destination);
-  };
+  const {
+    viewingItem,
+    editingItem,
+    deletingItem,
+    isViewDialogOpen,
+    isEditModalOpen,
+    isDeleteDialogOpen,
+    onViewOpenChange,
+    onEditOpenChange,
+    onDeleteOpenChange,
+    tableActions,
+  } = useRowActionModalState<IDoctor>();
 
   const {
-    data: doctorsResponseRaw,
-    isFetching,
-    isLoading,
-  } = useQuery<ApiResponse<IDoctor[]>>({
-    queryKey: ["doctors", effectiveQueryString],
-    queryFn: () => getDoctors(effectiveQueryString),
-    staleTime: 1000 * 60,
+    queryStringFromUrl,
+    optimisticSortingState,
+    optimisticPaginationState,
+    isRouteRefreshPending,
+    updateParams,
+    handleSortingChange,
+    handlePaginationChange,
+  } = useServerManagedDataTable({
+    searchParams,
+    defaultPage: DEFAULT_PAGE,
+    defaultLimit: DEFAULT_LIMIT,
   });
 
-  const doctorsResponse = doctorsResponseRaw as
-    | ApiResponse<IDoctor[]>
-    | undefined;
-  const doctors = doctorsResponse?.data || [];
-  const meta = doctorsResponse?.meta;
-  const pageCount =
-    meta?.totalPage ?? Math.max(1, Math.ceil((meta?.total ?? 0) / pageSize));
-  const tableLoading = isLoading || isFetching;
+  const queryString = queryStringFromUrl || initialQueryString;
+
+  const { searchTermFromUrl, handleDebouncedSearchChange } =
+    useServerManagedDataTableSearch({
+      searchParams,
+      updateParams,
+    });
+
+  const { filterValues, handleFilterChange, clearAllFilters } =
+    useServerManagedDataTableFilters({
+      searchParams,
+      definitions: DOCTOR_FILTER_DEFINITIONS,
+      updateParams,
+    });
+
+  const {
+    data: doctorDataResponse,
+    isLoading,
+    isFetching,
+  } = useQuery({
+    queryKey: ["doctors", queryString],
+    queryFn: () => getDoctors(queryString),
+  });
+
+  const { data: specialtiesResponse, isLoading: isLoadingSpecialties } =
+    useQuery({
+      queryKey: ["specialties"],
+      queryFn: getAllSpecialties,
+      staleTime: 1000 * 60 * 60 * 6,
+      gcTime: 1000 * 60 * 60 * 24,
+    });
+
+  const doctors = doctorDataResponse?.data ?? [];
+  const specialties = useMemo<ISpecialty[]>(() => {
+    return specialtiesResponse?.data ?? [];
+  }, [specialtiesResponse]);
+  const meta: PaginationMeta | undefined = doctorDataResponse?.meta;
+
+  const filterConfigs = useMemo<DataTableFilterConfig[]>(() => {
+    return [
+      {
+        id: "gender",
+        label: "Gender",
+        type: "single-select",
+        options: [
+          { label: "Male", value: "MALE" },
+          { label: "Female", value: "FEMALE" },
+          { label: "Other", value: "OTHER" },
+        ],
+      },
+      {
+        id: SPECIALTIES_FILTER_KEY,
+        label: "Specialties",
+        type: "multi-select",
+        options: specialties.map((specialty) => ({
+          label: specialty.title,
+          value: specialty.title,
+        })),
+      },
+      {
+        id: "appointmentFee",
+        label: "Fee Range",
+        type: "range",
+      },
+    ];
+  }, [specialties]);
+
+  const filterValuesForTable = useMemo<DataTableFilterValues>(() => {
+    return {
+      gender: filterValues.gender,
+      [SPECIALTIES_FILTER_KEY]: filterValues[SPECIALTIES_FILTER_KEY],
+      appointmentFee: filterValues[APPOINTMENT_FEE_FILTER_KEY],
+    };
+  }, [filterValues]);
 
   return (
-    <div className="relative space-y-4">
-      {tableLoading && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/60 backdrop-blur-sm">
-          <div className="flex items-center gap-2 rounded-md bg-muted px-4 py-3 text-sm text-muted-foreground shadow-lg">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-            Loading...
-          </div>
-        </div>
-      )}
-      <TableFilters
-        key={`${gender}-${appointmentFeeGte}-${appointmentFeeLte}`}
-        genderFilter={{
-          value: gender,
-          options: [
-            { label: "All", value: "" },
-            { label: "Female", value: "FEMALE" },
-            { label: "Male", value: "MALE" },
-            { label: "Other", value: "OTHER" },
-          ],
-          onApply: handleGenderApply,
-          onClear: () => handleGenderApply(""),
-        }}
-        appointmentFeeFilter={{
-          min: appointmentFeeGte,
-          max: appointmentFeeLte,
-          onApply: handleAppointmentFeeApply,
-          onClear: handleAppointmentFeeClear,
-        }}
-        disabled={tableLoading}
-      />
+    <>
       <DataTable
-        data={doctors || []}
+        data={doctors}
         columns={doctorColumns}
-        emptyMesssage="No doctors found."
-        isLoading={tableLoading}
-        actions={{
-          onView: handleView,
-          onEdit: handleEdit,
-          onDelete: handleDelete,
-        }}
+        isLoading={isLoading || isFetching || isRouteRefreshPending}
+        emptyMessage="No doctors found."
         sorting={{
-          state: sortingState,
+          state: optimisticSortingState,
           onSortingChange: handleSortingChange,
         }}
         pagination={{
-          pageIndex,
-          pageSize,
-          pageCount,
-          total: meta?.total,
-          pageSizeOptions: [1, 10, 20, 30, 50, 100],
-          onPageChange: handlePageChange,
-          onPageSizeChange: handlePageSizeChange,
+          state: optimisticPaginationState,
+          onPaginationChange: handlePaginationChange,
         }}
         search={{
-          value: searchTerm,
-          onSearchChange: handleSearchChange,
-          onSearchClear: handleSearchClear,
-          placeholder: "Search doctors...",
-          disabled: tableLoading,
+          initialValue: searchTermFromUrl,
+          placeholder: "Search doctor by name, email...",
+          debounceMs: 700,
+          onDebouncedChange: handleDebouncedSearchChange,
         }}
+        filters={{
+          configs: filterConfigs,
+          values: filterValuesForTable,
+          onFilterChange: handleFilterChange,
+          onClearAll: clearAllFilters,
+        }}
+        toolbarAction={
+          <CreateDoctorFormModal
+            specialities={specialties}
+            isLoadingSpecialties={isLoadingSpecialties}
+          />
+        }
+        meta={meta}
+        actions={tableActions}
       />
-    </div>
+
+      <EditDoctorFormModal
+        open={isEditModalOpen}
+        onOpenChange={onEditOpenChange}
+        doctor={editingItem}
+        specialties={specialties}
+        isLoadingSpecialties={isLoadingSpecialties}
+      />
+
+      <DeleteDoctorConfirmationDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={onDeleteOpenChange}
+        doctor={deletingItem}
+      />
+
+      <ViewDoctorProfileDialog
+        open={isViewDialogOpen}
+        onOpenChange={onViewOpenChange}
+        doctor={viewingItem}
+      />
+    </>
   );
 };
-
 export default DoctorsTable;

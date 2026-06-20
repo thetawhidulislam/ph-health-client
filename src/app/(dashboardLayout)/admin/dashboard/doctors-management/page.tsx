@@ -6,7 +6,6 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import React from "react";
 
 const DoctorsManagementPage = async ({
   searchParams,
@@ -33,16 +32,18 @@ const DoctorsManagementPage = async ({
     gcTime: 1000 * 60 * 60, // 1 hour
   });
 
+  const specialities = await getSpecialities();
+
   await queryClient.prefetchQuery({
     queryKey: ["specialities"],
-    queryFn: getSpecialities,
+    queryFn: () => specialities,
     staleTime: 1000 * 60 * 60,
     gcTime: 1000 * 60 * 60,
   });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <DoctorsTable queryString={queryString} />
+      <DoctorsTable queryString={queryString} specialities={specialities} />
     </HydrationBoundary>
   );
 };
