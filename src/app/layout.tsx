@@ -1,5 +1,6 @@
 import QueryProviders from "@/providers/QueryProvider";
 import type { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,9 +15,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html>
+    <html suppressHydrationWarning>
       <body className="min-h-full flex flex-col">
-        <QueryProviders>{children}</QueryProviders>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <QueryProviders>{children}</QueryProviders>
+        </ThemeProvider>
       </body>
     </html>
   );

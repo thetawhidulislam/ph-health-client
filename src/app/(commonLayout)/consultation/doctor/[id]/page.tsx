@@ -6,6 +6,7 @@ import { getUserInfo } from "@/services/auth.service";
 import { getDoctorById } from "@/services/doctor.service";
 import { type IDoctorDetails } from "@/types/doctor.types";
 import { format } from "date-fns";
+import { CalendarDays, Clock3, MapPin, ShieldCheck, Star, Stethoscope } from "lucide-react";
 import Link from "next/link";
 
 const formatDateTime = (value?: string | Date | null) => {
@@ -117,61 +118,64 @@ const ConsultationDoctorByIdPage = async ({
         <Button variant="outline">Back to Consultation</Button>
       </Link>
 
-      <div className="relative overflow-hidden rounded-2xl border bg-linear-to-r from-sky-50 via-white to-cyan-50 p-6">
-        <div className="absolute -right-12 -top-12 h-44 w-44 rounded-full bg-sky-300/20 blur-3xl" />
-        <div className="absolute -bottom-12 left-8 h-36 w-36 rounded-full bg-cyan-200/25 blur-3xl" />
-        <div className="flex flex-col gap-4 md:flex-row md:items-start">
-          <Avatar className="size-24 ring-4 ring-white shadow-sm">
-            <AvatarImage
-              src={doctorDetails.profilePhoto}
-              alt={doctorDetails.name}
-            />
-            <AvatarFallback>{getInitials(doctorDetails.name)}</AvatarFallback>
-          </Avatar>
-
-          <div className="relative space-y-2">
-            <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-              {doctorDetails.name}
-            </h1>
-            <p className="text-muted-foreground">
-              {doctorDetails.designation || "N/A"}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {doctorDetails.currentWorkingPlace || "N/A"}
-            </p>
-
-            <div className="flex flex-wrap gap-2">
-              {(doctorDetails.specialities ?? []).map((item) => (
-                <Badge key={item.specialty.id} variant="secondary">
-                  {item.specialty.title}
-                </Badge>
-              ))}
-              {(!doctorDetails.specialities ||
-                doctorDetails.specialities.length === 0) && (
-                <Badge variant="secondary">No specialties listed</Badge>
-              )}
-            </div>
-
-            <div className="flex flex-wrap gap-2 pt-1 text-xs">
-              <Badge variant="outline">
-                Experience: {doctorDetails.experience ?? 0} yrs
-              </Badge>
-              <Badge variant="outline">
-                Fee: ${doctorDetails.appointmentFee?.toFixed(2) ?? "N/A"}
-              </Badge>
-              <Badge variant="outline">
-                Rating: {doctorDetails.averageRating?.toFixed(1) ?? "0.0"}
-              </Badge>
-            </div>
-
-            <div className="pt-3">
-              <BookAppointmentModal
-                doctorId={String(doctorDetails.id)}
-                doctorName={doctorDetails.name}
-                isAuthenticated={Boolean(currentUser)}
-                viewerRole={currentUser?.role ?? null}
+      <div className="relative overflow-hidden rounded-3xl border bg-linear-to-br from-[#202938] via-[#2b3548] to-[#465468] p-6 text-white shadow-lg">
+        <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
+        <div className="absolute -bottom-10 left-8 h-36 w-36 rounded-full bg-cyan-300/20 blur-3xl" />
+        <div className="relative flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+          <div className="flex flex-col gap-4 md:flex-row md:items-start">
+            <Avatar className="size-24 ring-4 ring-white/20 shadow-sm">
+              <AvatarImage
+                src={doctorDetails.profilePhoto}
+                alt={doctorDetails.name}
               />
+              <AvatarFallback>{getInitials(doctorDetails.name)}</AvatarFallback>
+            </Avatar>
+
+            <div className="space-y-3">
+              <div>
+                <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+                  {doctorDetails.name}
+                </h1>
+                <p className="mt-1 text-sm text-slate-200">
+                  {doctorDetails.designation || "Specialist"}
+                </p>
+                <p className="text-sm text-slate-300">
+                  {doctorDetails.currentWorkingPlace || "Care available online and in clinic"}
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {(doctorDetails.specialities ?? []).map((item) => (
+                  <Badge key={item.specialty.id} variant="secondary" className="bg-white/15 text-white hover:bg-white/20">
+                    {item.specialty.title}
+                  </Badge>
+                ))}
+                {(!doctorDetails.specialities || doctorDetails.specialities.length === 0) && (
+                  <Badge variant="secondary" className="bg-white/15 text-white hover:bg-white/20">General care</Badge>
+                )}
+              </div>
+
+              <div className="flex flex-wrap gap-2 pt-1 text-xs">
+                <Badge variant="outline" className="border-white/25 bg-white/10 text-white">
+                  <Clock3 className="mr-1 h-3.5 w-3.5" /> {doctorDetails.experience ?? 0} yrs experience
+                </Badge>
+                <Badge variant="outline" className="border-white/25 bg-white/10 text-white">
+                  <Stethoscope className="mr-1 h-3.5 w-3.5" /> ${doctorDetails.appointmentFee?.toFixed(2) ?? "N/A"}
+                </Badge>
+                <Badge variant="outline" className="border-white/25 bg-white/10 text-white">
+                  <Star className="mr-1 h-3.5 w-3.5" /> {doctorDetails.averageRating?.toFixed(1) ?? "0.0"}
+                </Badge>
+              </div>
             </div>
+          </div>
+
+          <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+            <BookAppointmentModal
+              doctorId={String(doctorDetails.id)}
+              doctorName={doctorDetails.name}
+              isAuthenticated={Boolean(currentUser)}
+              viewerRole={currentUser?.role ?? null}
+            />
           </div>
         </div>
       </div>

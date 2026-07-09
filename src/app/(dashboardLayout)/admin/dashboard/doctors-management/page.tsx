@@ -43,7 +43,7 @@ const DoctorsManagementPage = async ({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <DoctorsTable queryString={queryString} specialities={specialities} />
+      <DoctorsTable initialQueryString={queryString} />
     </HydrationBoundary>
   );
 };
