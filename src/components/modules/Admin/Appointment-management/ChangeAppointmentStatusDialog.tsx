@@ -15,7 +15,7 @@ import { changeAppointmentStatusAction } from "@/app/(dashboardLayout)/admin/das
 import { IAppointment } from "@/types/appointment.types";
 import { UserInfo } from "@/types/user.types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -29,7 +29,7 @@ interface ChangeAppointmentStatusDialogProps {
 const STATUSES = ["SCHEDULED", "INPROGRESS", "COMPLETED", "CANCELED"];
 
 const ChangeAppointmentStatusDialog = ({ open, onOpenChange, appointment, currentUser }: ChangeAppointmentStatusDialogProps) => {
-  const [selected, setSelected] = useState<string>(appointment?.status ?? "SCHEDULED");
+  const [selected, setSelected] = useState<string>("SCHEDULED");
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -38,6 +38,12 @@ const ChangeAppointmentStatusDialog = ({ open, onOpenChange, appointment, curren
       return await changeAppointmentStatusAction(opts.id, { status: opts.status });
     },
   });
+
+  useEffect(() => {
+    if (open) {
+      setSelected(appointment?.status ?? "SCHEDULED");
+    }
+  }, [open, appointment]);
 
   const handleConfirm = async () => {
     if (!appointment) {
@@ -105,7 +111,7 @@ const ChangeAppointmentStatusDialog = ({ open, onOpenChange, appointment, curren
         </AlertDialogHeader>
 
         <div className="p-4">
-          <Select onValueChange={(v) => setSelected(v ?? appointment?.status ?? "SCHEDULED")} defaultValue={appointment?.status ?? "SCHEDULED"}>
+          <Select value={selected} onValueChange={(v) => setSelected(v ?? appointment?.status ?? "SCHEDULED")}>
             <SelectTrigger>
               <SelectValue placeholder="Select status" />
             </SelectTrigger>
