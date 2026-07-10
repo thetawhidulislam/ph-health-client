@@ -279,19 +279,30 @@ const DoctorsList = ({
 
   return (
     <section className="space-y-6 pb-8">
-      <div className="relative overflow-hidden rounded-2xl border bg-linear-to-br from-cyan-50 via-white to-blue-50 p-6">
-        <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-blue-200/30 blur-2xl" />
-        <div className="absolute -bottom-10 -left-10 h-36 w-36 rounded-full bg-cyan-200/30 blur-2xl" />
-        <div className="relative space-y-3">
-          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            Consult With Our Specialists
-          </h1>
-          <p className="max-w-3xl text-sm text-muted-foreground sm:text-base">
-            Discover trusted doctors, compare experience and fees, and open
-            detailed profiles to find the right specialist.
-          </p>
-        </div>
-      </div>
+      <div className="relative overflow-hidden rounded-[32px] border border-border bg-linear-to-br from-primary/10 via-background to-primary/5 p-8 shadow-lg">
+  {/* Background Effects */}
+  <div className="absolute -right-16 -top-16 h-52 w-52 rounded-full bg-primary/10 blur-3xl" />
+  <div className="absolute -bottom-16 -left-16 h-44 w-44 rounded-full bg-primary/10 blur-3xl" />
+
+  <div className="relative">
+    <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
+      Find Your Doctor
+    </span>
+
+    <h1 className="mt-6 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+      Consult With Our
+      <span className="text-primary"> Specialists</span>
+    </h1>
+
+    <p className="mt-5 max-w-3xl text-base leading-7 text-muted-foreground">
+      Discover trusted doctors, compare experience, consultation fees, ratings,
+      and patient reviews. Explore detailed profiles to find the right
+      specialist for your healthcare needs.
+    </p>
+
+   
+  </div>
+</div>
 
       <div className="rounded-2xl border bg-card p-4 shadow-sm sm:p-5">
         <div className="flex flex-wrap items-start gap-3">

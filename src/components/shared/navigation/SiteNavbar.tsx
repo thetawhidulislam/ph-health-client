@@ -9,16 +9,24 @@ import { SiteNavbarAuthActions } from "./SiteNavbarAuthActions";
 import { SiteNavbarLinks } from "./SiteNavbarLinks";
 
 const publicNavItems = [
-  { title: "Services", href: "/services" },
-  { title: "Care Plans", href: "/care-plans" },
-  { title: "Consultation", href: "/consultation" },
   { title: "About", href: "/about" },
+  { title: "Consultation", href: "/consultation" },
+  { title: "NGOs", href: "/ngos" },
+  { title: "Care Plans", href: "/care-plans" },
+  { title: "Health Plans", href: "/health-plans" },
+
+  { title: "Diagnostics", href: "/diagnostics" },
+
   { title: "Contact", href: "/contact" },
 ];
 
 export async function SiteNavbar() {
   const user = (await getUserInfo()) as UserInfo | null;
-  const dashboardHref = user ? getDefaultDashboardRoute(user.role as "SUPER_ADMIN" | "ADMIN" | "DOCTOR" | "PATIENT") : "/dashboard";
+  const dashboardHref = user
+    ? getDefaultDashboardRoute(
+        user.role as "SUPER_ADMIN" | "ADMIN" | "DOCTOR" | "PATIENT",
+      )
+    : "/dashboard";
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/90 backdrop-blur">
@@ -28,7 +36,9 @@ export async function SiteNavbar() {
             <Stethoscope className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">PH Healthcare</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              PH Healthcare
+            </p>
             <p className="text-base font-semibold">Care that connects</p>
           </div>
         </Link>

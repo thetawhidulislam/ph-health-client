@@ -1,10 +1,12 @@
-
-
 import DoctorsList from "@/components/modules/Consultation/DoctorList";
 import Footer from "@/components/modules/Footer/Footer";
 import { getUserInfo } from "@/services/auth.service";
 import { getAllSpecialties, getDoctors } from "@/services/doctor.service";
-import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
 const SPECIALTIES_FILTER_KEY = "specialties.specialty.title";
 const APPOINTMENT_FEE_FILTER_KEY = "appointmentFee";
@@ -74,16 +76,18 @@ const ConsultationPage = async ({
     staleTime: 1000 * 60 * 60 * 6,
     gcTime: 1000 * 60 * 60 * 24,
   });
- return (
-   <HydrationBoundary state={dehydrate(queryClient)}>
-      <DoctorsList
-        initialQueryString={queryString}
-        isAuthenticated={Boolean(currentUser)}
-        viewerRole={currentUser?.role ?? null}
-      />
-         <Footer />
-   </HydrationBoundary>
- );
-}
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-8 px-4 py-10 sm:px-6 lg:px-8">
+        <DoctorsList
+          initialQueryString={queryString}
+          isAuthenticated={Boolean(currentUser)}
+          viewerRole={currentUser?.role ?? null}
+        />
+      </div>
+      <Footer />
+    </HydrationBoundary>
+  );
+};
 
-export default ConsultationPage
+export default ConsultationPage;
