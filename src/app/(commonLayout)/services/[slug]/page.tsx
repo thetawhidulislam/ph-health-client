@@ -87,12 +87,13 @@ const ServiceDetailsPage = async ({ params }: { params: Promise<{ slug: string }
                 <p className="text-sm text-muted-foreground">
                   Continue to the consultation experience to speak with a clinician or review upcoming availability.
                 </p>
-                <Button asChild className="w-full rounded-full">
-                  <Link href="/consultation">
-                    Explore doctor availability
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
+                <Link
+                  href="/consultation"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition hover:bg-primary/80"
+                >
+                  Explore doctor availability
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </CardContent>
             </Card>
           </div>

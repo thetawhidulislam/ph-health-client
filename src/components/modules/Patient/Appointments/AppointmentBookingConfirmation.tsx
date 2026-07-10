@@ -132,14 +132,18 @@ const AppointmentBookingConfirmation = ({
           </Alert>
         </CardContent>
         <CardFooter className="gap-3">
-          <Button asChild variant="outline">
-            <Link href="/consultation">Back to Consultation</Link>
-          </Button>
-          <Button asChild>
-            <Link href={`/consultation/doctor/${doctorId}`}>
-              Open Doctor Details
-            </Link>
-          </Button>
+          <Link
+            href="/consultation"
+            className="inline-flex h-10 items-center justify-center rounded-md border border-border px-4 py-2 text-sm font-medium transition hover:bg-muted"
+          >
+            Back to Consultation
+          </Link>
+          <Link
+            href={`/consultation/doctor/${doctorId}`}
+            className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/80"
+          >
+            Open Doctor Details
+          </Link>
         </CardFooter>
       </Card>
     );
@@ -268,11 +272,12 @@ const AppointmentBookingConfirmation = ({
               {payLaterMutation.isPending ? "Booking..." : "Book & Pay Later"}
             </Button>
 
-            <Button asChild variant="ghost" className="w-full">
-              <Link href={`/consultation/doctor/${doctorId}`}>
-                Back to Doctor Details
-              </Link>
-            </Button>
+            <Link
+              href={`/consultation/doctor/${doctorId}`}
+              className="inline-flex w-full items-center justify-center rounded-md border border-border bg-transparent px-4 py-2 text-sm font-medium transition hover:bg-muted"
+            >
+              Back to Doctor Details
+            </Link>
           </CardFooter>
         </Card>
       </div>

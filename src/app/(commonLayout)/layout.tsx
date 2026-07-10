@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { SiteNavbar } from "@/components/shared/navigation/SiteNavbar";
 
 export const metadata: Metadata = {
   title: "PH-Healthcare",
@@ -14,6 +15,7 @@ export default function CommonLayout({
 }>) {
   return (
     <>
+      <SiteNavbar />
       {children}
     </>
   );

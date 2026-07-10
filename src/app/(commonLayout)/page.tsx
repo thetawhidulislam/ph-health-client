@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, CalendarDays, ShieldCheck, Sparkles, Stethoscope, Users } from "lucide-react";
+import { ArrowRight, BadgeCheck, CalendarDays, ShieldCheck, Sparkles, Users } from "lucide-react";
 
-import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const features = [
@@ -54,38 +53,6 @@ const faqs = [
 export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-50 border-b border-border/70 bg-background/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-              <Stethoscope className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-sm font-semibold tracking-[0.2em] text-muted-foreground uppercase">PH Healthcare</p>
-              <p className="text-base font-semibold">Care that connects</p>
-            </div>
-          </Link>
-
-          <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
-            <Link href="#features" className="transition hover:text-primary">Features</Link>
-            <Link href="#services" className="transition hover:text-primary">Services</Link>
-            <Link href="#about" className="transition hover:text-primary">About</Link>
-            <Link href="#faq" className="transition hover:text-primary">FAQ</Link>
-            <Link href="/login" className="transition hover:text-primary">Login</Link>
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <Link
-              href="/login"
-              className="inline-flex h-10 items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/80"
-            >
-              Get started
-            </Link>
-          </div>
-        </div>
-      </header>
-
       <section className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-24">
         <div className="flex flex-col justify-center">
           <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
