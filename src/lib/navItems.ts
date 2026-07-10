@@ -111,12 +111,12 @@ export const adminNavItems: NavSection[] = [
       },
       {
         title: "Payments",
-        href: "/admin/dashboard/payments-management",
+        href: "/admin/dashboard/payment-management",
         icon: "CreditCard",
       },
       {
         title: "Prescriptions",
-        href: "/admin/dashboard/prescriptions-management",
+        href: "/admin/dashboard/prescription-management",
         icon: "FileText",
       },
       {
