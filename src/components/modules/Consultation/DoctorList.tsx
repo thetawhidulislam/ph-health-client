@@ -32,7 +32,6 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
-import { Clock3, MapPin, Star, Stethoscope } from "lucide-react";
 import BookAppointmentModal from "../Patient/Appointments/BookAppointmentModal";
 
 const DEFAULT_PAGE = 1;

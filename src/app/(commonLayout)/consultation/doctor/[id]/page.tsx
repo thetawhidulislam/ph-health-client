@@ -7,7 +7,7 @@ import { getUserInfo } from "@/services/auth.service";
 import { getDoctorById } from "@/services/doctor.service";
 import { type IDoctorDetails } from "@/types/doctor.types";
 import { format } from "date-fns";
-import { CalendarDays, Clock3, MapPin, ShieldCheck, Star, Stethoscope } from "lucide-react";
+import {  Clock3, Star, Stethoscope } from "lucide-react";
 import Link from "next/link";
 
 const formatDateTime = (value?: string | Date | null) => {

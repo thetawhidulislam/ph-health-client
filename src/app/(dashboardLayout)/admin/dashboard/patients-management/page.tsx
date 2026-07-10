@@ -1,9 +1,10 @@
-import AppointmentsTable from "@/components/modules/Admin/Appointment-management/AppointmentsTable";
-import { getAllAppointments } from "@/services/appointment.services";
-import { getUserInfo } from "@/services/auth.service";
+
+
+import PatientsTable from "@/components/modules/Admin/Patient-management/PatientsTable";
+import { getPatients } from "@/services/patient.service";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 
-const AppointmentsManagementPage = async ({ searchParams }: {
+const PatientsManagementPage = async ({ searchParams }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
   const queryParamsObject = await searchParams;
@@ -20,19 +21,17 @@ const AppointmentsManagementPage = async ({ searchParams }: {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["appointments", queryString],
-    queryFn: () => getAllAppointments(queryString),
-    staleTime: 1000 * 60 * 60,
-    gcTime: 1000 * 60 * 60,
+    queryKey: ["patients", queryString],
+    queryFn: () => getPatients(queryString),
+    staleTime: 1000 * 60 * 60, // 1 hour
+    gcTime: 1000 * 60 * 60, // 1 hour
   });
-
-  const currentUser = await getUserInfo();
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <AppointmentsTable initialQueryString={queryString} currentUser={currentUser} />
+      <PatientsTable initialQueryString={queryString} />
     </HydrationBoundary>
   );
 };
 
-export default AppointmentsManagementPage;
+export default PatientsManagementPage;

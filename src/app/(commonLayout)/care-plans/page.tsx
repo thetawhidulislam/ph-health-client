@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, CalendarCheck2, HeartPulse, ShieldCheck, Sparkles } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUserInfo } from "@/services/auth.service";
 import Footer from "@/components/modules/Footer/Footer";

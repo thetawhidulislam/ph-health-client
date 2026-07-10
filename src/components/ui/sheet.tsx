@@ -4,7 +4,7 @@ import * as React from "react"
 import { Dialog as SheetPrimitive } from "@base-ui/react/dialog"
 
 import { cn } from "@/lib/utils"
-import { XIcon } from "lucide-react"
+import { X } from "lucide-react"
 
 type SheetProps = SheetPrimitive.Root.Props & {
   disablePointerDismissal?: boolean;
@@ -87,7 +87,7 @@ function SheetContent({
             data-slot="sheet-close"
             className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-transparent text-muted-foreground transition hover:border-border hover:bg-muted"
           >
-            <XIcon className="h-4 w-4" />
+            <X className="h-4 w-4" />
             <span className="sr-only">Close</span>
           </SheetPrimitive.Close>
         )}

@@ -8,7 +8,6 @@ import {
   Mail,
   MapPin,
   Phone,
-  Stethoscope,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
