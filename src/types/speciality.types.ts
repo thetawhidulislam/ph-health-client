@@ -5,3 +5,11 @@ export interface ISpecialty {
   createdAt?: string;
   updatedAt?: string;
 }
+export interface IDoctorSpecialtyCategory {
+  id: string;
+  title: string;
+  icon?: string;
+  doctorCount: number;
+  createdAt?: string;
+  updatedAt?: string;
+}

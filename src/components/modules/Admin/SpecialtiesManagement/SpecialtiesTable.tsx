@@ -28,13 +28,10 @@ const SpecialtiesTable = ({
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   const {
-    viewingItem,
     editingItem,
     deletingItem,
-    isViewDialogOpen,
     isEditModalOpen,
     isDeleteDialogOpen,
-    onViewOpenChange,
     onEditOpenChange,
     onDeleteOpenChange,
     tableActions,

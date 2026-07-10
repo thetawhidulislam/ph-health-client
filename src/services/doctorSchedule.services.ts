@@ -7,6 +7,17 @@ import {
   IUpdateDoctorSchedulePayload,
 } from "@/types/doctorSchedule.types";
 
+export const getDoctorSchedules = async (queryString: string) => {
+  try {
+    return await httpClient.get<IDoctorSchedule[]>(
+      queryString ? `/doctor-schedules?${queryString}` : "/doctor-schedules",
+    );
+  } catch (error) {
+    console.log("Error fetching doctor schedules:", error);
+    throw error;
+  }
+};
+
 export const getMyDoctorSchedules = async (queryString: string) => {
   try {
     return await httpClient.get<IDoctorSchedule[]>(
