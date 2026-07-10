@@ -1,6 +1,7 @@
 
 
 import DoctorsList from "@/components/modules/Consultation/DoctorList";
+import Footer from "@/components/modules/Footer/Footer";
 import { getUserInfo } from "@/services/auth.service";
 import { getAllSpecialties, getDoctors } from "@/services/doctor.service";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
@@ -80,6 +81,7 @@ const ConsultationPage = async ({
         isAuthenticated={Boolean(currentUser)}
         viewerRole={currentUser?.role ?? null}
       />
+         <Footer />
    </HydrationBoundary>
  );
 }

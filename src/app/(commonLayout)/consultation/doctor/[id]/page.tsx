@@ -1,3 +1,4 @@
+import Footer from "@/components/modules/Footer/Footer";
 import BookAppointmentModal from "@/components/modules/Patient/Appointments/BookAppointmentModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -294,6 +295,7 @@ const ConsultationDoctorByIdPage = async ({
           )}
         </div>
       </div>
+         <Footer />
     </section>
   );
 };

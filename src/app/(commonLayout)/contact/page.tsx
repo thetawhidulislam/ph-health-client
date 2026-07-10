@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import Footer from "@/components/modules/Footer/Footer";
 
 const initialState = {
   name: "",
@@ -104,6 +105,7 @@ export default function ContactPage() {
           </CardContent>
         </Card>
       </section>
+         <Footer />
     </main>
   );
 }

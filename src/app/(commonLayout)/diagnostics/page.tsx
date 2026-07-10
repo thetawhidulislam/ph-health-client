@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Microscope, ShieldCheck } from "lucide-react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import Footer from "@/components/modules/Footer/Footer";
 
 const diagnosticsServices = [
   "Laboratory testing",
@@ -50,6 +51,7 @@ export default function DiagnosticsPage() {
           <h2 className="mt-3 text-2xl font-semibold">Patients receive support before, during, and after every test.</h2>
         </section>
       </section>
+         <Footer />
     </main>
   );
 }

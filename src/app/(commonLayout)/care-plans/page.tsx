@@ -4,6 +4,7 @@ import { ArrowRight, CalendarCheck2, HeartPulse, ShieldCheck, Sparkles } from "l
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUserInfo } from "@/services/auth.service";
+import Footer from "@/components/modules/Footer/Footer";
 
 const plans = [
   {
@@ -85,6 +86,7 @@ export default async function CarePlansPage() {
           Data-driven recommendations powered by your connected care records
         </div>
       </section>
+         <Footer />
     </main>
   );
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, HeartHandshake, ShieldCheck, Sparkles, Stethoscope } from "lucide-react";
+import Footer from "@/components/modules/Footer/Footer";
 
 const principles = [
   {
@@ -75,6 +76,7 @@ export default function AboutPage() {
           );
         })}
       </section>
+         <Footer />
     </main>
   );
 }

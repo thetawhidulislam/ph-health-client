@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, HeartHandshake, ShieldCheck } from "lucide-react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import Footer from "@/components/modules/Footer/Footer";
 
 const coverageOptions = [
   "Preventive care support",
@@ -50,6 +51,7 @@ export default function HealthPlansPage() {
           <h2 className="mt-3 text-2xl font-semibold">Plans help patients stay connected to clinicians, reminders, and follow-up actions.</h2>
         </section>
       </section>
+         <Footer />
     </main>
   );
 }
