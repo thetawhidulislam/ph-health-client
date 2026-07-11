@@ -1,20 +1,16 @@
 "use server";
 
 import { httpClient } from "@/lib/axios/httpClient";
-import { iAdminDashboardData } from "@/types/dashboard.type";
+import { ApiResponse } from "@/types/api.types";
+import { iDashboardData } from "@/types/dashboard.type";
 
 export async function getDashboardData() {
   try {
-    const response = await httpClient.get<iAdminDashboardData>("/stats");
+    const response = await httpClient.get<ApiResponse<iDashboardData>>("/stats");
 
     return response;
   } catch (error) {
     console.log("Error fetching dashboard data:", error);
-    return {
-      data: null,
-      success: false,
-      message: "Failed to fetch dashboard data",
-      meta: null,
-    };
+    throw new Error("Failed to fetch dashboard data");
   }
 }

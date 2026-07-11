@@ -136,11 +136,6 @@ export const patientNavItems: NavSection[] = [
         href: "/dashboard/my-appointments",
         icon: "Calendar",
       },
-      {
-        title: "Book Appointment",
-        href: "/dashboard/book-appointments",
-        icon: "ClipboardList",
-      },
     ],
   },
   {
@@ -148,14 +143,10 @@ export const patientNavItems: NavSection[] = [
     items: [
       {
         title: "My Prescriptions",
-        href: "/dashboard/my-prescriptions",
+        href: "/dashboard/my-prescription",
         icon: "FileText",
       },
-      {
-        title: "Health Records",
-        href: "/dashboard/health-records",
-        icon: "Activity",
-      },
+     
     ],
   },
 ];

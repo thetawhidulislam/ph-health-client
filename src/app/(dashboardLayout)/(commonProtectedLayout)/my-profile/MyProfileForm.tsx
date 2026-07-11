@@ -6,6 +6,9 @@ import AppSubmitButton from "@/components/shared/form/AppSubmitButton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -29,6 +32,9 @@ const MyProfileForm = ({
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+const [imagePreview, setImagePreview] = useState<string | null>(
+  initialValues.profilePhoto || null,
+);
 
   const role = currentUser.role?.toUpperCase();
 
@@ -77,6 +83,40 @@ const MyProfileForm = ({
           }}
           className="space-y-4"
         >
+          {/* Profile Photo */}
+          <form.Field name="profilePhoto">
+            {(field) => (
+              <div className="flex flex-col items-center gap-4 rounded-xl border border-border/70 p-5">
+                <Avatar className="h-24 w-24 border border-border/70">
+                  <AvatarImage
+                    src={imagePreview ?? undefined}
+                    alt="Profile photo"
+                  />
+                  <AvatarFallback className="text-lg">
+                    {currentUser.name?.charAt(0)?.toUpperCase() ?? "U"}
+                  </AvatarFallback>
+                </Avatar>
+
+                <div className="w-full max-w-xs space-y-1.5">
+                  <Label htmlFor="profilePhotoLink">Image URL</Label>
+                  <Input
+                    id="profilePhotoLink"
+                    placeholder="https://example.com/photo.jpg"
+                    value={field.state.value ?? ""}
+                    onChange={(e) => {
+                      field.handleChange(e.target.value);
+                      setImagePreview(e.target.value || null);
+                    }}
+                    onBlur={field.handleBlur}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Paste a direct link to your profile image
+                  </p>
+                </div>
+              </div>
+            )}
+          </form.Field>
+
           <div className="grid gap-4 md:grid-cols-2">
             <form.Field
               name="name"

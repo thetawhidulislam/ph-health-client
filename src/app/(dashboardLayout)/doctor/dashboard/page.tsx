@@ -23,9 +23,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import AppointmentPieChart from "@/components/shared/AppointmentPieChart";
+import StatsCard from "@/components/shared/StatsCard";
+import { getDashboardData } from "@/services/dashboard.service";
 import { getMyDoctorSchedules } from "@/services/doctorSchedule.services";
 import { getMyAppointments } from "@/services/appointment.services";
 import { getMyPrescriptions } from "@/services/prescription.service";
+import { type iDoctorDashboardData } from "@/types/dashboard.type";
 import { type IAppointment } from "@/types/appointment.types";
 import { type IPrescription } from "@/types/prescription.types";
 import { type IDoctorSchedule } from "@/types/doctorSchedule.types";
@@ -74,6 +78,14 @@ function parseDate(value?: string | Date | null) {
   return value ? new Date(value) : null;
 }
 
+function formatCurrency(value: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
 export default function DoctorDashboardPage() {
   const { data: appointmentsRes, isLoading: appointmentsLoading } = useQuery({
     queryKey: ["doctor-my-appointments"],
@@ -93,6 +105,22 @@ export default function DoctorDashboardPage() {
   const appointments: IAppointment[] = appointmentsRes?.data ?? [];
   const prescriptions: IPrescription[] = prescriptionsRes?.data ?? [];
   const doctorSchedules: IDoctorSchedule[] = doctorSchedulesRes?.data ?? [];
+
+  const { data: dashboardRes, isLoading: dashboardLoading } = useQuery({
+    queryKey: ["doctor-dashboard-data"],
+    queryFn: getDashboardData,
+  });
+
+  const dashboardData = dashboardRes?.data as iDoctorDashboardData | undefined;
+  const statusSegmentCount =
+    dashboardData?.appointmentStatusDistribution?.reduce(
+      (sum, item) => sum + item.count,
+      0,
+    ) ?? 0;
+
+  const isAnyLoading =
+    appointmentsLoading || prescriptionsLoading || schedulesLoading ||
+    dashboardLoading;
 
   const today = new Date();
 
@@ -158,6 +186,52 @@ export default function DoctorDashboardPage() {
             </Link>
           );
         })}
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:col-span-2">
+          {isAnyLoading ? (
+            <>
+              <Skeleton className="h-28 w-full rounded-xl" />
+              <Skeleton className="h-28 w-full rounded-xl" />
+              <Skeleton className="h-28 w-full rounded-xl" />
+              <Skeleton className="h-28 w-full rounded-xl" />
+            </>
+          ) : (
+            <>
+              <StatsCard
+                title="Appointments"
+                value={dashboardData?.appointmentCount ?? 0}
+                iconName="CalendarDays"
+                description="Total appointments handled."
+              />
+              <StatsCard
+                title="Patients"
+                value={dashboardData?.patientCount ?? 0}
+                iconName="Users"
+                description="Unique patients served."
+              />
+              <StatsCard
+                title="Revenue"
+                value={formatCurrency(dashboardData?.totalRevenue ?? 0)}
+                iconName="CurrencyDollar"
+                description="Total collected payments."
+              />
+              <StatsCard
+                title="Status Segments"
+                value={statusSegmentCount}
+                iconName="PieChart"
+                description="Appointment status categories."
+              />
+            </>
+          )}
+        </div>
+
+        <AppointmentPieChart
+          data={dashboardData?.appointmentStatusDistribution ?? []}
+          title="Appointment Distribution"
+          description="How your appointments are distributed by status."
+        />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">

@@ -11,6 +11,7 @@ export type ProfileFormValues = {
   contactNumber?: string;
   address?: string;
   registrationNumber?: string;
+  profilePhoto?:string;
   appointmentFee?: number;
   qualification?: string;
   currentWorkingPlace?: string;
@@ -41,6 +42,7 @@ export const updateMyProfileAction: UpdateProfileAction = async ({
             ? { contactNumber: values.contactNumber }
             : {}),
           ...(values.address ? { address: values.address } : {}),
+          ...(values.profilePhoto ? { profilePhoto: values.profilePhoto } : {}),
         },
       };
 
