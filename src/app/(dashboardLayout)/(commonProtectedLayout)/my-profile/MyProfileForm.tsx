@@ -21,7 +21,11 @@ interface MyProfileFormProps {
   updateAction: UpdateProfileAction;
 }
 
-const MyProfileForm = ({ currentUser, initialValues, updateAction }: MyProfileFormProps) => {
+const MyProfileForm = ({
+  currentUser,
+  initialValues,
+  updateAction,
+}: MyProfileFormProps) => {
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -29,7 +33,8 @@ const MyProfileForm = ({ currentUser, initialValues, updateAction }: MyProfileFo
   const role = currentUser.role?.toUpperCase();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: async (values: ProfileFormValues) => updateAction({ user: currentUser, values }),
+    mutationFn: async (values: ProfileFormValues) =>
+      updateAction({ user: currentUser, values }),
   });
 
   const form = useForm({
@@ -73,45 +78,106 @@ const MyProfileForm = ({ currentUser, initialValues, updateAction }: MyProfileFo
           className="space-y-4"
         >
           <div className="grid gap-4 md:grid-cols-2">
-            <form.Field name="name" validators={{ onChange: updateProfileFormZodSchema.shape.name  as any}}>
-              {(field) => <AppField field={field} label="Name" placeholder="Enter your full name" />}
+            <form.Field
+              name="name"
+              validators={{
+                onChange: updateProfileFormZodSchema.shape.name as any,
+              }}
+            >
+              {(field) => (
+                <AppField
+                  field={field}
+                  label="Name"
+                  placeholder="Enter your full name"
+                />
+              )}
             </form.Field>
 
-            <form.Field name="email" validators={{ onChange: updateProfileFormZodSchema.shape.email as any }}>
-              {(field) => <AppField field={field} type="email" label="Email" placeholder="Enter your email" />}
+            <form.Field
+              name="email"
+              validators={{
+                onChange: updateProfileFormZodSchema.shape.email as any,
+              }}
+            >
+              {(field) => (
+                <AppField
+                  field={field}
+                  type="email"
+                  label="Email"
+                  placeholder="Enter your email"
+                />
+              )}
             </form.Field>
 
             <form.Field
               name="contactNumber"
-              validators={{ onChange: updateProfileFormZodSchema.shape.contactNumber as any }}
+              validators={{
+                onChange: updateProfileFormZodSchema.shape.contactNumber as any,
+              }}
             >
-              {(field) => <AppField field={field} label="Contact Number" placeholder="Enter your contact number" />}
+              {(field) => (
+                <AppField
+                  field={field}
+                  label="Contact Number"
+                  placeholder="Enter your contact number"
+                />
+              )}
             </form.Field>
 
-            <form.Field name="address" validators={{ onChange: updateProfileFormZodSchema.shape.address as any }}>
-              {(field) => <AppField field={field} label="Address" placeholder="Enter your address" />}
+            <form.Field
+              name="address"
+              validators={{
+                onChange: updateProfileFormZodSchema.shape.address as any,
+              }}
+            >
+              {(field) => (
+                <AppField
+                  field={field}
+                  label="Address"
+                  placeholder="Enter your address"
+                />
+              )}
             </form.Field>
 
             {role === "DOCTOR" && (
               <>
                 <form.Field
                   name="registrationNumber"
-                  validators={{ onChange: updateProfileFormZodSchema.shape.registrationNumber as any }}
+                  validators={{
+                    onChange: updateProfileFormZodSchema.shape
+                      .registrationNumber as any,
+                  }}
                 >
                   {(field) => (
-                    <AppField field={field} label="Registration Number" placeholder="Enter registration number" />
+                    <AppField
+                      field={field}
+                      label="Registration Number"
+                      placeholder="Enter registration number"
+                    />
                   )}
                 </form.Field>
 
-                <form.Field name="gender" validators={{ onChange: updateProfileFormZodSchema.shape.gender as any }}>
+                <form.Field
+                  name="gender"
+                  validators={{
+                    onChange: updateProfileFormZodSchema.shape.gender as any,
+                  }}
+                >
                   {(field) => (
-                    <AppField field={field} label="Gender" placeholder="MALE or FEMALE" />
+                    <AppField
+                      field={field}
+                      label="Gender"
+                      placeholder="MALE or FEMALE"
+                    />
                   )}
                 </form.Field>
 
                 <form.Field
                   name="appointmentFee"
-                  validators={{ onChange: updateProfileFormZodSchema.shape.appointmentFee as any }}
+                  validators={{
+                    onChange: updateProfileFormZodSchema.shape
+                      .appointmentFee as any,
+                  }}
                 >
                   {(field) => (
                     <AppField
@@ -125,25 +191,50 @@ const MyProfileForm = ({ currentUser, initialValues, updateAction }: MyProfileFo
 
                 <form.Field
                   name="qualification"
-                  validators={{ onChange: updateProfileFormZodSchema.shape.qualification  as any }}
+                  validators={{
+                    onChange: updateProfileFormZodSchema.shape
+                      .qualification as any,
+                  }}
                 >
-                  {(field) => <AppField field={field} label="Qualification" placeholder="Enter qualification" />}
+                  {(field) => (
+                    <AppField
+                      field={field}
+                      label="Qualification"
+                      placeholder="Enter qualification"
+                    />
+                  )}
                 </form.Field>
 
                 <form.Field
                   name="currentWorkingPlace"
-                  validators={{ onChange: updateProfileFormZodSchema.shape.currentWorkingPlace as any }}
+                  validators={{
+                    onChange: updateProfileFormZodSchema.shape
+                      .currentWorkingPlace as any,
+                  }}
                 >
                   {(field) => (
-                    <AppField field={field} label="Current Working Place" placeholder="Enter current workplace" />
+                    <AppField
+                      field={field}
+                      label="Current Working Place"
+                      placeholder="Enter current workplace"
+                    />
                   )}
                 </form.Field>
 
                 <form.Field
                   name="designation"
-                  validators={{ onChange: updateProfileFormZodSchema.shape.designation as any  }}
+                  validators={{
+                    onChange: updateProfileFormZodSchema.shape
+                      .designation as any,
+                  }}
                 >
-                  {(field) => <AppField field={field} label="Designation" placeholder="Enter designation" />}
+                  {(field) => (
+                    <AppField
+                      field={field}
+                      label="Designation"
+                      placeholder="Enter designation"
+                    />
+                  )}
                 </form.Field>
               </>
             )}
@@ -152,7 +243,8 @@ const MyProfileForm = ({ currentUser, initialValues, updateAction }: MyProfileFo
               <div className="md:col-span-2">
                 <Alert>
                   <AlertDescription>
-                    Admin updates are restricted to profile information only. Use the fields above to update your display details.
+                    Admin updates are restricted to profile information only.
+                    Use the fields above to update your display details.
                   </AlertDescription>
                 </Alert>
               </div>
@@ -174,7 +266,9 @@ const MyProfileForm = ({ currentUser, initialValues, updateAction }: MyProfileFo
             <AppSubmitButton isPending={isPending} disabled={false}>
               Update Profile
             </AppSubmitButton>
-            <Button variant="outline" onClick={() => void router.push("/")}>Cancel</Button>
+            <Button variant="outline" onClick={() => void router.push("/")}>
+              Cancel
+            </Button>
           </div>
         </form>
       </CardContent>

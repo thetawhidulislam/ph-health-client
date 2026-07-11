@@ -1,7 +1,6 @@
 import DashboardNavbar from "@/components/modules/Dashboard/DashboardNavbar";
 import DashboardSidebar from "@/components/modules/Dashboard/DashboardSidebar";
 import React from "react";
-import { Toaster } from "sonner";
 
 const RootDashboardLayout = async ({
   children,
@@ -15,7 +14,7 @@ const RootDashboardLayout = async ({
         <main className="flex-1 overflow-x-hidden p-4 md:p-6 lg:p-8">
           <DashboardNavbar />
           <div>{children}</div>
-          <Toaster />
+  
         </main>
       </div>
     </div>

@@ -1,9 +1,10 @@
-import React from 'react'
+import DoctorAppointmentsList from "@/components/modules/Doctor/DoctorAppointments/DoctorAppointmentsList";
+import { getMyAppointments } from "@/services/appointment.services";
 
-const DoctorAppointmentsPage = () => {
-  return (
-    <div>DoctorAppointmentsPage</div>
-  )
-}
+const DoctorAppointmentsPage = async () => {
+  const response = await getMyAppointments();
 
-export default DoctorAppointmentsPage
+  return <DoctorAppointmentsList appointments={response.data} />;
+};
+
+export default DoctorAppointmentsPage;

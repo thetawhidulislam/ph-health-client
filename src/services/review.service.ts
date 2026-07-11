@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { httpClient } from "@/lib/axios/httpClient";
@@ -32,5 +33,31 @@ export const getReviews = async (queryString?: string) => {
   }
 
   console.error("No valid review endpoint found.", REVIEW_ENDPOINTS, lastError);
+  throw new Error("Review endpoint not found");
+};
+export const getMyReviews = async (queryString?: string) => {
+  let lastError: unknown;
+
+  for (const basePath of REVIEW_ENDPOINTS) {
+    try {
+      const url = buildUrl(`${basePath}/my-reviews`, queryString);
+
+      return await httpClient.get<IReview[]>(url);
+    } catch (error: unknown) {
+      lastError = error;
+
+      const errorResponse =
+        error && typeof error === "object" && "response" in error
+          ? (error as any).response
+          : null;
+
+      if (errorResponse?.status === 404) {
+        continue;
+      }
+
+      throw error;
+    }
+  }
+
   throw new Error("Review endpoint not found");
 };

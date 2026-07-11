@@ -2,7 +2,7 @@
 
 import { httpClient } from "@/lib/axios/httpClient";
 import { ApiErrorResponse, type ApiResponse } from "@/types/api.types";
-import { type IUpdateDoctorPayload } from "@/types/doctor.types";
+import { type IUpdateDoctorPayload, Gender } from "@/types/doctor.types";
 import { type UserInfo } from "@/types/user.types";
 
 export type ProfileFormValues = {
@@ -18,9 +18,10 @@ export type ProfileFormValues = {
   gender?: string;
 };
 
-export type UpdateProfileAction = (
-  params: { user: UserInfo; values: ProfileFormValues },
-) => Promise<ApiResponse<unknown> | ApiErrorResponse>;
+export type UpdateProfileAction = (params: {
+  user: UserInfo;
+  values: ProfileFormValues;
+}) => Promise<ApiResponse<unknown> | ApiErrorResponse>;
 
 export const updateMyProfileAction: UpdateProfileAction = async ({
   user,
@@ -31,31 +32,44 @@ export const updateMyProfileAction: UpdateProfileAction = async ({
 }): Promise<ApiResponse<unknown> | ApiErrorResponse> => {
   try {
     const role = user.role?.toUpperCase();
-
+    console.log(user.id);
     if (role === "PATIENT") {
       const payload = {
         patientInfo: {
           ...(values.name ? { name: values.name } : {}),
-          ...(values.contactNumber ? { contactNumber: values.contactNumber } : {}),
+          ...(values.contactNumber
+            ? { contactNumber: values.contactNumber }
+            : {}),
           ...(values.address ? { address: values.address } : {}),
         },
       };
 
-      return await httpClient.patch<unknown>("/patients/update-my-profile", payload);
+      return await httpClient.patch<unknown>(
+        "/patients/update-my-profile",
+        payload,
+      );
     }
 
     if (role === "DOCTOR") {
       const payload: IUpdateDoctorPayload = {
         doctor: {
           ...(values.name ? { name: values.name } : {}),
-          ...(values.contactNumber ? { contactNumber: values.contactNumber } : {}),
+          ...(values.contactNumber
+            ? { contactNumber: values.contactNumber }
+            : {}),
           ...(values.address ? { address: values.address } : {}),
-          ...(values.registrationNumber ? { registrationNumber: values.registrationNumber } : {}),
-          ...(values.gender ? { gender: values.gender as "MALE" | "FEMALE" } : {}),
+          ...(values.registrationNumber
+            ? { registrationNumber: values.registrationNumber }
+            : {}),
+          ...(values.gender
+            ? { gender: values.gender === "MALE" ? Gender.MALE : Gender.FEMALE }
+            : {}),
           ...(typeof values.appointmentFee === "number"
             ? { appointmentFee: values.appointmentFee }
             : {}),
-          ...(values.qualification ? { qualification: values.qualification } : {}),
+          ...(values.qualification
+            ? { qualification: values.qualification }
+            : {}),
           ...(values.currentWorkingPlace
             ? { currentWorkingPlace: values.currentWorkingPlace }
             : {}),
@@ -71,7 +85,9 @@ export const updateMyProfileAction: UpdateProfileAction = async ({
         admin: {
           ...(values.name ? { name: values.name } : {}),
           ...(values.email ? { email: values.email } : {}),
-          ...(values.contactNumber ? { contactNumber: values.contactNumber } : {}),
+          ...(values.contactNumber
+            ? { contactNumber: values.contactNumber }
+            : {}),
           ...(values.address ? { address: values.address } : {}),
         },
       };

@@ -6,7 +6,7 @@ import { updateMyProfileAction, type ProfileFormValues } from "./_action";
 
 const MyProfilePage = async () => {
   const currentUser = await getUserInfo();
-
+  const docotorinfo = currentUser.doctor;
   if (!currentUser) {
     return (
       <div className="min-h-[calc(100vh-5rem)] flex items-center justify-center px-4 py-10">
@@ -34,20 +34,19 @@ const MyProfilePage = async () => {
   };
 
   if (role === "DOCTOR") {
-    const doctorResponse = await getDoctorById(currentUser.id).catch(() => null);
-
-    if (doctorResponse?.success) {
-      const doctor = doctorResponse.data;
-      initialValues.name = doctor.name ?? initialValues.name;
-      initialValues.email = doctor.email ?? initialValues.email;
-      initialValues.contactNumber = doctor.contactNumber ?? "";
-      initialValues.address = doctor.address ?? "";
-      initialValues.registrationNumber = doctor.registrationNumber ?? "";
-      initialValues.gender = doctor.gender ?? "";
-      initialValues.appointmentFee = doctor.appointmentFee ?? undefined;
-      initialValues.qualification = doctor.qualification ?? "";
-      initialValues.currentWorkingPlace = doctor.currentWorkingPlace ?? "";
-      initialValues.designation = doctor.designation ?? "";
+    
+    if (docotorinfo) {
+      const doctor = docotorinfo;
+      initialValues.name = doctor?.name ?? initialValues.name;
+      initialValues.email = doctor?.email ?? initialValues.email;
+      initialValues.contactNumber = doctor?.contactNumber ?? "";
+      initialValues.address = doctor?.address ?? "";
+      initialValues.registrationNumber = doctor?.registrationNumber ?? "";
+      initialValues.gender = doctor?.gender ?? "";
+      initialValues.appointmentFee = doctor?.appointmentFee ?? undefined;
+      initialValues.qualification = doctor?.qualification ?? "";
+      initialValues.currentWorkingPlace = doctor?.currentWorkingPlace ?? "";
+      initialValues.designation = doctor?.designation ?? "";
     }
   }
 

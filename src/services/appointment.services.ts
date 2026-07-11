@@ -83,7 +83,10 @@ export const changeAppointmentStatus = async (
   payload: { status: string },
 ) => {
   try {
-    return await httpClient.patch(`/appointments/change-appointment-status/${appointmentId}`, payload);
+    return await httpClient.patch(
+      `/appointments/change-appointment-status/${appointmentId}`,
+      payload,
+    );
   } catch (error) {
     console.log("Error changing appointment status:", error);
     throw error;

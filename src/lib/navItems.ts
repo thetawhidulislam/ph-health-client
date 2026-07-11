@@ -52,7 +52,7 @@ export const doctorNavItems: NavSection[] = [
       },
       {
         title: "Prescriptions",
-        href: "/doctor/dashboard/prescriptions",
+        href: "/doctor/dashboard/prescription",
         icon: "FileText",
       },
       {
