@@ -2,12 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import {
-  ChevronDown,
-  LayoutDashboard,
-  LogOut,
-  UserRound,
-} from "lucide-react";
+import { ChevronDown, LayoutDashboard, LogOut, UserRound } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -19,6 +14,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { type UserInfo } from "@/types/user.types";
+import { logoutUser } from "@/services/auth.service";
+import { toast } from "sonner";
 
 interface SiteNavbarAuthActionsProps {
   user: UserInfo | null;
@@ -31,7 +28,6 @@ export function SiteNavbarAuthActions({
 }: SiteNavbarAuthActionsProps) {
   const router = useRouter();
 
-
   if (!user) {
     return (
       <button
@@ -43,6 +39,17 @@ export function SiteNavbarAuthActions({
     );
   }
 
+  const handleLogout = async () => {
+    const success = await logoutUser();
+
+    if (success) {
+      toast.success("Logged out successfully");
+      router.push("/login");
+      router.refresh();
+    } else {
+      toast.error("Logout failed");
+    }
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-2 text-sm font-medium hover:bg-muted">
@@ -85,7 +92,7 @@ export function SiteNavbarAuthActions({
 
         <DropdownMenuItem
           variant="destructive"
-          onClick={() => router.push("/logout")}
+          onClick={handleLogout}
           className="cursor-pointer"
         >
           <LogOut className="h-4 w-4" />

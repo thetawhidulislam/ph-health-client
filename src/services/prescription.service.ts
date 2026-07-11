@@ -7,11 +7,13 @@ const buildPrescriptionUrl = (basePath: string, queryString?: string) =>
   `${basePath}${queryString ? `?${queryString}` : ""}`;
 
 const PRESCRIPTION_ENDPOINTS = [
-  "/prescriptions",
   "/prescription",
-  "/api/prescriptions",
+  "/prescription",
+  "/api/prescription",
   "/api/prescription",
 ];
+
+const BASE = "/prescription"; 
 
 export const getPrescriptions = async (queryString?: string) => {
   let lastError: unknown;
@@ -44,4 +46,56 @@ export const getPrescriptions = async (queryString?: string) => {
     lastError,
   );
   throw new Error("Prescription endpoint not found. Check your backend route.");
+};
+export const givePrescription = async (payload: {
+  appointmentId: string;
+  instructions: string;
+  followUpDate: string;
+}) => {
+  try {
+    return await httpClient.post<IPrescription>(BASE, payload);
+  } catch (error) {
+    console.log("Error giving prescription:", error);
+    throw error;
+  }
+};
+
+export const getMyPrescriptions = async () => {
+  try {
+    return await httpClient.get<IPrescription[]>(`${BASE}/my-prescriptions`);
+  } catch (error) {
+    console.log("Error fetching my prescriptions:", error);
+    throw error;
+  }
+};
+
+export const getAllPrescriptions = async (queryString?: string) => {
+  try {
+    const url = `${BASE}${queryString ? `?${queryString}` : ""}`;
+    return await httpClient.get<IPrescription[]>(url);
+  } catch (error) {
+    console.log("Error fetching all prescriptions:", error);
+    throw error;
+  }
+};
+
+export const updatePrescription = async (
+  id: string,
+  payload: { instructions?: string; followUpDate?: string },
+) => {
+  try {
+    return await httpClient.patch<IPrescription>(`${BASE}/${id}`, payload);
+  } catch (error) {
+    console.log("Error updating prescription:", error);
+    throw error;
+  }
+};
+
+export const deletePrescription = async (id: string) => {
+  try {
+    return await httpClient.delete<{ message: string }>(`${BASE}/${id}`);
+  } catch (error) {
+    console.log("Error deleting prescription:", error);
+    throw error;
+  }
 };

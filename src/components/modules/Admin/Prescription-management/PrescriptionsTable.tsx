@@ -48,7 +48,7 @@ const PrescriptionsTable = ({
     useServerManagedDataTableSearch({ searchParams, updateParams });
 
   const { data, isLoading, isFetching } = useQuery({
-    queryKey: ["prescriptions", queryString],
+    queryKey: ["prescription", queryString],
     queryFn: () => getPrescriptions(queryString),
   });
 

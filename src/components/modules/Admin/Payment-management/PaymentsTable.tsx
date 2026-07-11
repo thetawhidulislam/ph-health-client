@@ -39,7 +39,7 @@ const PaymentsTable = ({
     useServerManagedDataTableSearch({ searchParams, updateParams });
 
   const { data, isLoading, isFetching } = useQuery({
-    queryKey: ["payments", queryString],
+    queryKey: ["payment", queryString],
     queryFn: () => getPayments(queryString),
   });
 

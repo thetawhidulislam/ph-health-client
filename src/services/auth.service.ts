@@ -79,3 +79,36 @@ export async function getUserInfo() {
     return null;
   }
 }
+export async function logoutUser(): Promise<boolean> {
+  try {
+    const cookieStore = await cookies();
+
+    const accessToken = cookieStore.get("accessToken")?.value;
+    const refreshToken = cookieStore.get("refreshToken")?.value;
+    const sessionToken = cookieStore.get("better-auth.session_token")?.value;
+
+    const res = await fetch(`${BASE_API_URL}/auth/logout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: [
+          accessToken && `accessToken=${accessToken}`,
+          refreshToken && `refreshToken=${refreshToken}`,
+          sessionToken && `better-auth.session_token=${sessionToken}`,
+        ]
+          .filter(Boolean)
+          .join("; "),
+      },
+    });
+
+    // Remove cookies from Next.js
+    cookieStore.delete("accessToken");
+    cookieStore.delete("refreshToken");
+    cookieStore.delete("better-auth.session_token");
+
+    return res.ok;
+  } catch (error) {
+    console.error("Error logging out:", error);
+    return false;
+  }
+}

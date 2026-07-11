@@ -6,10 +6,8 @@ import {
   isAuthRoute,
   UserRole,
 } from "./lib/authUtils";
-import {
-  getNewTokensWithRefreshToken,
-  getUserInfo,
-} from "./services/auth.service";
+import { getNewTokensWithRefreshToken } from "./lib/axios/tokenRefresher";
+import { getUserInfo } from "./services/auth.service";
 import { isTokenExpiringSoon } from "./lib/tokenUtils";
 
 async function refreshTokenMiddleware(refreshToken: string): Promise<boolean> {

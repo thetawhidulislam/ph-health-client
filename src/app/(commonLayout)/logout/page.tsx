@@ -1,9 +1,7 @@
 import { redirect } from "next/navigation";
-import { deleteCookie } from "@/lib/cookieUtils";
+import { logoutUser } from "@/services/auth.service";
 
 export default async function LogoutPage() {
-  await deleteCookie("accessToken");
-  await deleteCookie("refreshToken");
-  await deleteCookie("better-auth.session_token");
-  redirect("/");
+  await logoutUser();
+  redirect("/login");
 }
