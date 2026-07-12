@@ -2,6 +2,9 @@
 
 import { setTokenInCookies } from "@/lib/tokenUtils";
 import { cookies } from "next/headers";
+import { AxiosError } from "axios";
+import { httpClient } from "@/lib/axios/httpClient";
+import { UserInfo } from "@/types/user.types";
 
 const BASE_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -13,12 +16,32 @@ export async function getNewTokensWithRefreshToken(
   refreshToken: string,
 ): Promise<boolean> {
   try {
+    const cookieStore = await cookies();
+    const sessionToken = cookieStore.get("better-auth.session_token")?.value;
+
+    if (!refreshToken || !sessionToken) {
+      console.error("Refresh token request missing tokens:", {
+        refreshToken: Boolean(refreshToken),
+        sessionToken: Boolean(sessionToken),
+      });
+      return false;
+    }
+
+    const cookieHeader = [
+      `refreshToken=${refreshToken}`,
+      `better-auth.session_token=${sessionToken}`,
+    ].join("; ");
+
     const res = await fetch(`${BASE_API_URL}/auth/refresh-token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Cookie: `refreshToken=${refreshToken}`,
+        Cookie: cookieHeader,
       },
+      body: JSON.stringify({
+        refreshToken,
+        sessionToken,
+      }),
     });
 
     if (!res.ok) {
@@ -48,32 +71,35 @@ export async function getNewTokensWithRefreshToken(
   }
 }
 
-export async function getUserInfo() {
+export async function getUserInfo(): Promise<UserInfo | null> {
   try {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get("accessToken")?.value;
-    const sessionToken = cookieStore.get("better-auth.session_token")?.value;
+    const refreshToken = cookieStore.get("refreshToken")?.value;
 
-    if (!accessToken) {
+    if (!accessToken && !refreshToken) {
       return null;
     }
 
-    const res = await fetch(`${BASE_API_URL}/auth/me`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: `accessToken=${accessToken}; better-auth.session_token=${sessionToken}`,
-      },
-    });
+    try {
+      const response = await httpClient.get<UserInfo>("/auth/me");
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError && error.response?.status === 401 && refreshToken) {
+        const refreshed = await getNewTokensWithRefreshToken(refreshToken);
+        if (refreshed) {
+          const retryResponse = await httpClient.get<UserInfo>("/auth/me");
+          return retryResponse.data;
+        }
+      }
 
-    if (!res.ok) {
-      console.error("Failed to fetch user info:", res.status, res.statusText);
+      if (error instanceof AxiosError && error.response?.status === 401) {
+        console.error("Failed to fetch user info:", 401, "Unauthorized");
+      } else {
+        console.error("Error fetching user info:", error);
+      }
       return null;
     }
-
-    const { data } = await res.json();
-
-    return data;
   } catch (error) {
     console.error("Error fetching user info:", error);
     return null;

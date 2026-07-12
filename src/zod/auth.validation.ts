@@ -12,6 +12,47 @@ export const loginZodSchema = z.object({
   // .regex(/[@$!%*?&]/, "Password must contain at least one special character (@, $, !, %, *, ?, &)")
 });
 
+export const registerZodSchema = z
+  .object({
+    name: z.string().min(3, "Name must be at least 3 characters long"),
+    email: z.email("Invalid email address"),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters long"),
+    confirmPassword: z.string().min(1, "Confirm password is required"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords do not match",
+  });
+
+export const forgotPasswordZodSchema = z.object({
+  email: z.email("Invalid email address"),
+});
+
+export const resetPasswordZodSchema = z
+  .object({
+    email: z.email("Invalid email address"),
+    otp: z.string().min(1, "OTP is required"),
+    newPassword: z.string().min(8, "Password must be at least 8 characters long"),
+    confirmPassword: z.string().min(1, "Confirm password is required"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords do not match",
+  });
+
+export const verifyEmailZodSchema = z.object({
+  email: z.email("Invalid email address"),
+  otp: z.string().min(1, "OTP is required"),
+});
+
+export type IRegisterFormPayload = z.infer<typeof registerZodSchema>;
+export type IRegisterPayload = Omit<IRegisterFormPayload, "confirmPassword">;
+export type IForgotPasswordPayload = z.infer<typeof forgotPasswordZodSchema>;
+export type IResetPasswordPayload = z.infer<typeof resetPasswordZodSchema>;
+export type IVerifyEmailPayload = z.infer<typeof verifyEmailZodSchema>;
+
 export const changePasswordZodSchema = z
   .object({
     currentPassword: z

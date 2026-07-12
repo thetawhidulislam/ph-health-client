@@ -13,3 +13,10 @@ export interface ILoginResponse {
     emailVerified: boolean;
   };
 }
+
+export interface IRegisterResponse {
+  token: string;
+  accessToken: string;
+  refreshToken: string;
+  rest?: unknown;
+}

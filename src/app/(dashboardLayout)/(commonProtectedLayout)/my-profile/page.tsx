@@ -1,13 +1,12 @@
-import { getDoctorById } from "@/services/doctor.service";
-import { getPatientById } from "@/services/patient.service";
 import { getUserInfo } from "@/services/auth.service";
 import MyProfileForm from "./MyProfileForm";
 import { updateMyProfileAction, type ProfileFormValues } from "./_action";
 
 const MyProfilePage = async () => {
   const currentUser = await getUserInfo();
-  const doctorinfo = currentUser.doctor;
-  const patientinfo = currentUser.patient;
+  const doctorinfo = currentUser?.doctor;
+  const patientinfo = currentUser?.patient;
+
   if (!currentUser) {
     return (
       <div className="min-h-[calc(100vh-5rem)] flex items-center justify-center px-4 py-10">
@@ -39,38 +38,29 @@ const MyProfilePage = async () => {
     gender: "",
   };
 
-  if (role === "DOCTOR") {
-    if (doctorinfo) {
-      const doctor = doctorinfo;
-      initialValues.name = doctor?.name ?? initialValues.name;
-      initialValues.email = doctor?.email ?? initialValues.email;
-      initialValues.contactNumber = doctor?.contactNumber ?? "";
-      initialValues.address = doctor?.address ?? "";
-
-      initialValues.profilePhoto = doctor.profilePhoto ?? "";
-
-      initialValues.registrationNumber = doctor?.registrationNumber ?? "";
-      initialValues.gender = doctor?.gender ?? "";
-      initialValues.appointmentFee = doctor?.appointmentFee ?? undefined;
-      initialValues.qualification = doctor?.qualification ?? "";
-      initialValues.currentWorkingPlace = doctor?.currentWorkingPlace ?? "";
-      initialValues.designation = doctor?.designation ?? "";
-    }
+  if (role === "DOCTOR" && doctorinfo) {
+    initialValues.name = doctorinfo.name ?? initialValues.name;
+    initialValues.email = doctorinfo.email ?? initialValues.email;
+    initialValues.contactNumber = doctorinfo.contactNumber ?? "";
+    initialValues.address = doctorinfo.address ?? "";
+    initialValues.profilePhoto = doctorinfo.profilePhoto ?? "";
+    initialValues.registrationNumber = doctorinfo.registrationNumber ?? "";
+    initialValues.gender = doctorinfo.gender ?? "";
+    initialValues.appointmentFee = doctorinfo.appointmentFee ?? undefined;
+    initialValues.qualification = doctorinfo.qualification ?? "";
+    initialValues.currentWorkingPlace = doctorinfo.currentWorkingPlace ?? "";
+    initialValues.designation = doctorinfo.designation ?? "";
   }
 
-  if (role === "PATIENT") {
-    // const patientResponse = await getPatientById(currentUser.id).catch(() => null);
-
-    if (patientinfo) {
-      const patient = patientinfo;
-      initialValues.name = patient.name ?? initialValues.name;
-      initialValues.email = patient.email ?? initialValues.email;
-      initialValues.profilePhoto = patient.profilePhoto ?? initialValues.profilePhoto;
-      initialValues.contactNumber = patient.contactNumber ?? "";
-      initialValues.address = patient.address ?? "";
-    }
+  if (role === "PATIENT" && patientinfo) {
+    initialValues.name = patientinfo.name ?? initialValues.name;
+    initialValues.email = patientinfo.email ?? initialValues.email;
+    initialValues.profilePhoto =
+      patientinfo.profilePhoto ?? initialValues.profilePhoto;
+    initialValues.contactNumber = patientinfo.contactNumber ?? "";
+    initialValues.address = patientinfo.address ?? "";
   }
-  console.log(patientinfo);
+
   return (
     <MyProfileForm
       currentUser={currentUser}

@@ -64,13 +64,6 @@ export const LoginAction = async (
     ) {
       throw error;
     }
-    if (
-      error &&
-      error.response &&
-      error.response.data.message === "Email not verified"
-    ) {
-      redirect(`/verify-email?email=${payload.email}`);
-    }
     return {
       success: false,
       message: `login failed : ${error instanceof Error ? error.message : "Unknown error"}`,

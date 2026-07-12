@@ -1,7 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { LoginAction } from "@/app/(commonLayout)/(auth)/login/_action";
 import AppField from "@/components/shared/form/AppField";
 import AppSubmitButton from "@/components/shared/form/AppSubmitButton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -14,110 +13,77 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ILoginPayload, loginZodSchema } from "@/zod/auth.validation";
+import { ApiErrorResponse } from "@/types/api.types";
+import { IRegisterFormPayload, registerZodSchema } from "@/zod/auth.validation";
+import { RegisterAction } from "@/app/(commonLayout)/(auth)/register/_action";
 
 import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
 
 import Link from "next/link";
-import React, { useState } from "react";
-import { Eye, EyeOff, ShieldCheck, Stethoscope, UserRound } from "lucide-react";
-import { toast } from "sonner";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
-interface LoginFormProps {
+
+interface RegisterFormProps {
   redirectPath?: string;
 }
 
-const demoAccounts = [
-  {
-    role: "Admin",
-    email: "admin@gmail.com",
-    password: "12345678",
-    icon: ShieldCheck,
-    accent: "text-slate-600",
-    ring: "hover:border-slate-300 hover:bg-slate-50",
-  },
-  {
-    role: "Doctor",
-    email: "dr.mahmudhasan@gmail.com",
-    password: "Doctor@789",
-    icon: Stethoscope,
-    accent: "text-teal-700",
-    ring: "hover:border-teal-300 hover:bg-teal-50",
-  },
-  {
-    role: "Patient",
-    email: "tawhidulislam200688@gmail.com",
-    password: "123456789",
-    icon: UserRound,
-    accent: "text-amber-600",
-    ring: "hover:border-amber-300 hover:bg-amber-50",
-  },
-];
 
-const LoginForm = ({ redirectPath }: LoginFormProps) => {
+const RegisterForm = ({ redirectPath }: RegisterFormProps) => {
   const [serverError, setServerError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { mutateAsync, isPending } = useMutation({
-    mutationFn: (payload: ILoginPayload) => LoginAction(payload, redirectPath),
+  const { mutateAsync, isPending } = useMutation<
+    void | ApiErrorResponse,
+    Error,
+    IRegisterFormPayload
+  >({
+    mutationFn: (payload: IRegisterFormPayload) =>
+      RegisterAction(payload, redirectPath),
   });
 
   const form = useForm({
     defaultValues: {
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
     onSubmit: async ({ value }) => {
       setServerError(null);
       try {
-        const result = (await mutateAsync(value)) as any;
-        if (!result.success) {
-          setServerError(result.message || "login failed");
-          return;
+        const result = await mutateAsync(value);
+        if (result && "success" in result && !result.success) {
+          setServerError(result.message || "registration failed");
         }
       } catch (error: any) {
-        console.log(`Login Failed: ${error.message}`);
-        setServerError(error.message || "login failed");
+        setServerError(error.message || "registration failed");
       }
     },
   });
 
-  const fillDemoCredentials = (
-    email: string,
-    password: string,
-    role: string,
-  ) => {
-    form.setFieldValue("email", email);
-    form.setFieldValue("password", password);
-    toast.success(`${role} credentials loaded`);
-  };
-
   return (
     <div className="relative mx-auto w-full max-w-md">
-      {/* Ambient care-glow, purely decorative */}
-      <div className="pointer-events-none absolute -top-16 -left-10 h-40 w-40 rounded-full bg-teal-200/40 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-14 -right-10 h-40 w-40 rounded-full bg-amber-200/40 blur-3xl" />
+      <div className="pointer-events-none absolute -top-16 -left-10 h-40 w-40 rounded-full bg-amber-200/40 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-14 -right-10 h-40 w-40 rounded-full bg-teal-200/40 blur-3xl" />
 
       <Card className="relative overflow-hidden rounded-[28px] border border-teal-900/10 bg-white/90 shadow-[0_20px_60px_-15px_rgba(11,79,74,0.25)] backdrop-blur-sm animate-in fade-in-0 zoom-in-95 duration-500">
-        {/* Top accent bar */}
-        <div className="h-1.5 w-full bg-gradient-to-r from-teal-700 via-teal-500 to-amber-400" />
+        <div className="h-1.5 w-full bg-gradient-to-r from-amber-500 via-amber-400 to-teal-400" />
 
         <CardHeader className="pb-2 pt-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-teal-700/80">
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-amber-700/80">
             PH Healthcare
           </p>
           <CardTitle className="mt-2 font-serif text-3xl font-semibold tracking-tight text-slate-900">
-            Welcome back to your care record
+            Create your patient account
           </CardTitle>
           <CardDescription className="mt-1 text-sm text-slate-500">
-            Sign in to pick up right where your care team left off.
+            Register to manage appointments, prescriptions, and your profile.
           </CardDescription>
-
-          {/* Signature pulse-line divider */}
           <svg
             viewBox="0 0 400 32"
-            className="mx-auto mt-5 h-6 w-full max-w-[220px] text-teal-600/70"
+            className="mx-auto mt-5 h-6 w-full max-w-[220px] text-amber-600/70"
             fill="none"
           >
             <path
@@ -143,40 +109,23 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
             }}
             className="space-y-5"
           >
-            {/* Quick demo access */}
-            <div className="rounded-2xl border border-teal-900/10 bg-teal-50/50 p-3">
-              <p className="mb-2.5 px-1 text-[11px] font-medium uppercase tracking-wide text-teal-700/70">
-                Quick demo access
-              </p>
-              <div className="grid grid-cols-3 gap-2">
-                {demoAccounts.map((account) => {
-                  const Icon = account.icon;
-                  return (
-                    <button
-                      key={account.role}
-                      type="button"
-                      onClick={() =>
-                        fillDemoCredentials(
-                          account.email,
-                          account.password,
-                          account.role,
-                        )
-                      }
-                      className={`flex flex-col items-center gap-1.5 rounded-xl border border-transparent bg-white px-2 py-3 text-center shadow-sm transition ${account.ring}`}
-                    >
-                      <Icon className={`size-5 ${account.accent}`} />
-                      <span className="text-xs font-semibold text-slate-800">
-                        {account.role}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            <form.Field
+              name="name"
+              validators={{ onChange: registerZodSchema.shape.name }}
+            >
+              {(field) => (
+                <AppField
+                  field={field}
+                  label="Full Name"
+                  type="text"
+                  placeholder="Enter your full name"
+                />
+              )}
+            </form.Field>
 
             <form.Field
               name="email"
-              validators={{ onChange: loginZodSchema.shape.email }}
+              validators={{ onChange: registerZodSchema.shape.email }}
             >
               {(field) => (
                 <AppField
@@ -190,16 +139,15 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
 
             <form.Field
               name="password"
-              validators={{ onChange: loginZodSchema.shape.password }}
+              validators={{ onChange: registerZodSchema.shape.password }}
             >
               {(field) => (
                 <AppField
                   field={field}
                   label="Password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
+                  placeholder="Create a password"
                   aria-label={showPassword ? "Hide password" : "Show password"}
-                  className="cursor-pointer"
                   append={
                     <Button
                       type="button"
@@ -218,14 +166,19 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
               )}
             </form.Field>
 
-            <div className="-mt-1 text-right">
-              <Link
-                href="/forgot-password"
-                className="text-sm font-medium text-teal-700 hover:underline underline-offset-4"
-              >
-                Forgot password?
-              </Link>
-            </div>
+            <form.Field
+              name="confirmPassword"
+              validators={{ onChange: registerZodSchema.shape.confirmPassword }}
+            >
+              {(field) => (
+                <AppField
+                  field={field}
+                  label="Confirm Password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Confirm your password"
+                />
+              )}
+            </form.Field>
 
             {serverError && (
               <Alert variant="destructive">
@@ -233,17 +186,15 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
               </Alert>
             )}
 
-            <form.Subscribe
-              selector={(s) => [s.canSubmit, s.isSubmitting] as const}
-            >
+            <form.Subscribe selector={(s) => [s.canSubmit, s.isSubmitting] as const}>
               {([canSubmit, isSubmitting]) => (
                 <AppSubmitButton
                   isPending={isSubmitting || isPending}
-                  pendingLabel="Logging In...."
+                  pendingLabel="Registering..."
                   disabled={!canSubmit}
-                  className="h-11 w-full rounded-full bg[#353D4A] text-base font-medium tracking-wide shadow-lg shadow-teal-700/20 transition hover:bg[#313946]"
+                  className="h-11 w-full rounded-full bg-[#353D4A] text-base font-medium tracking-wide shadow-lg shadow-amber-700/20 transition hover:bg-[#313946]"
                 >
-                  Log In
+                  Create Account
                 </AppSubmitButton>
               )}
             </form.Subscribe>
@@ -255,7 +206,7 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
             </div>
             <div className="relative flex justify-center text-xs">
               <span className="bg-white px-3 uppercase tracking-wide text-slate-400">
-                Or continue with
+                Already have an account?
               </span>
             </div>
           </div>
@@ -286,18 +237,18 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            Sign in with Google
+            Continue with Google
           </Button>
         </CardContent>
 
         <CardFooter className="justify-center border-t border-slate-100 pt-4">
           <p className="text-sm text-slate-500">
-            Don&apos;t have an account?{" "}
+            Already have an account?{" "}
             <Link
-              href="/register"
-              className="font-medium text-teal-700 hover:underline underline-offset-4"
+              href="/login"
+              className="font-medium text-amber-700 hover:underline underline-offset-4"
             >
-              Sign Up for an account
+              Log in
             </Link>
           </p>
         </CardFooter>
@@ -306,4 +257,4 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

@@ -66,6 +66,7 @@ export const updateMyProfileAction: UpdateProfileAction = async ({
           ...(values.gender
             ? { gender: values.gender === "MALE" ? Gender.MALE : Gender.FEMALE }
             : {}),
+             ...(values.profilePhoto ? { profilePhoto: values.profilePhoto } : {}),
           ...(typeof values.appointmentFee === "number"
             ? { appointmentFee: values.appointmentFee }
             : {}),

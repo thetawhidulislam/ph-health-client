@@ -82,6 +82,7 @@ export default function Home() {
   const bestDoctor = doctorsResponse?.data?.sort(
     (a, b) => b.averageRating - a.averageRating,
   )?.[0];
+  console.log(bestDoctor)
   return (
     <main className="min-h-screen bg-background text-foreground">
       <section className="relative overflow-hidden">
