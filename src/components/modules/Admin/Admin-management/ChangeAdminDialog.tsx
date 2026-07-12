@@ -1,6 +1,9 @@
 "use client";
 
-import { changeUserRoleAction, changeUserStatusAction } from "@/app/(dashboardLayout)/admin/dashboard/admins-management/_action";
+import {
+  changeUserRoleAction,
+  changeUserStatusAction,
+} from "@/app/(dashboardLayout)/admin/dashboard/admins-management/_action";
 import {
   Dialog,
   DialogContent,
@@ -21,7 +24,7 @@ import {
 import { type IAdmin } from "@/types/admin.types";
 import { UserStatus } from "@/types/doctor.types";
 import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 interface ChangeAdminDialogProps {
@@ -31,19 +34,35 @@ interface ChangeAdminDialogProps {
   onSuccess: () => void;
 }
 
-const ChangeAdminDialog = ({ open, onOpenChange, admin, onSuccess }: ChangeAdminDialogProps) => {
-  const [selectedStatus, setSelectedStatus] = useState<UserStatus>(UserStatus.ACTIVE);
+const ChangeAdminDialog = ({
+  open,
+  onOpenChange,
+  admin,
+  onSuccess,
+}: ChangeAdminDialogProps) => {
+  const [selectedStatus, setSelectedStatus] = useState<UserStatus>(
+    UserStatus.ACTIVE,
+  );
   const [selectedRole, setSelectedRole] = useState<string>("ADMIN");
+  const [syncedAdminId, setSyncedAdminId] = useState<string | null>(null);
 
   const statusMutation = useMutation({ mutationFn: changeUserStatusAction });
   const roleMutation = useMutation({ mutationFn: changeUserRoleAction });
 
-  useEffect(() => {
-    if (open && admin) {
-      setSelectedStatus(admin.user?.status ?? UserStatus.ACTIVE);
-      setSelectedRole(admin.user?.role ?? "ADMIN");
-    }
-  }, [admin, open]);
+  // Derive state during render instead of useEffect, per React's
+  // "you might not need an effect" guidance — avoids the extra
+  // render pass that setState-in-effect causes.
+  const currentAdminId = open ? (admin?.user?.id ?? null) : null;
+
+  if (currentAdminId && currentAdminId !== syncedAdminId) {
+    setSyncedAdminId(currentAdminId);
+    setSelectedStatus(admin?.user?.status ?? UserStatus.ACTIVE);
+    setSelectedRole(admin?.user?.role ?? "ADMIN");
+  }
+
+  if (!open && syncedAdminId !== null) {
+    setSyncedAdminId(null);
+  }
 
   const handleSubmit = async () => {
     if (!admin || !admin.user?.id) {
@@ -62,7 +81,10 @@ const ChangeAdminDialog = ({ open, onOpenChange, admin, onSuccess }: ChangeAdmin
 
     try {
       if (roleChanged) {
-        const roleResult = await roleMutation.mutateAsync({ userId, role: selectedRole });
+        const roleResult = await roleMutation.mutateAsync({
+          userId,
+          role: selectedRole,
+        });
         if (!roleResult.success) {
           toast.error(roleResult.message || "Failed to update role");
           return;
@@ -71,7 +93,10 @@ const ChangeAdminDialog = ({ open, onOpenChange, admin, onSuccess }: ChangeAdmin
       }
 
       if (statusChanged) {
-        const statusResult = await statusMutation.mutateAsync({ userId, userStatus: selectedStatus });
+        const statusResult = await statusMutation.mutateAsync({
+          userId,
+          userStatus: selectedStatus,
+        });
         if (!statusResult.success) {
           toast.error(statusResult.message || "Failed to update status");
           return;
@@ -86,20 +111,25 @@ const ChangeAdminDialog = ({ open, onOpenChange, admin, onSuccess }: ChangeAdmin
     }
   };
 
-  const isPending = statusMutation.isLoading || roleMutation.isLoading;
+  const isPending = statusMutation.isPending || roleMutation.isPending;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-xl">
         <DialogHeader>
           <DialogTitle>Manage Admin</DialogTitle>
-          <DialogDescription>Update status or role for this admin account.</DialogDescription>
+          <DialogDescription>
+            Update status or role for this admin account.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 pt-4">
           <div className="space-y-2">
             <Label htmlFor="role">Role</Label>
-            <Select value={selectedRole} onValueChange={setSelectedRole}>
+            <Select
+              value={selectedRole}
+              onValueChange={(value) => setSelectedRole(value ?? "ADMIN")}
+            >
               <SelectTrigger id="role">
                 <SelectValue placeholder="Select role" />
               </SelectTrigger>
@@ -112,7 +142,14 @@ const ChangeAdminDialog = ({ open, onOpenChange, admin, onSuccess }: ChangeAdmin
 
           <div className="space-y-2">
             <Label htmlFor="status">Status</Label>
-            <Select value={selectedStatus} onValueChange={(value) => setSelectedStatus(value as UserStatus)}>
+            <Select
+              value={selectedStatus}
+              onValueChange={(value) =>
+                setSelectedStatus(
+                  value ? (value as UserStatus) : UserStatus.ACTIVE,
+                )
+              }
+            >
               <SelectTrigger id="status">
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>

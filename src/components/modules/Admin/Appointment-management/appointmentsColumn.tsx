@@ -11,9 +11,9 @@ export const appointmentColumns: ColumnDef<IAppointment>[] = [
     header: "Doctor",
     cell: ({ row }) => (
       <UserInfoCell
-        name={row.original.doctor?.name}
-        email={row.original.doctor?.email}
-        profilePhoto={row.original.doctor?.profilePhoto}
+        name={row.original.doctor?.name ?? "Unknown"}
+        email={row.original.doctor?.email ?? "—"}
+        profilePhoto={row.original.doctor?.profilePhoto ?? ""}
       />
     ),
   },
@@ -24,8 +24,8 @@ export const appointmentColumns: ColumnDef<IAppointment>[] = [
     header: "Patient",
     cell: ({ row }) => (
       <UserInfoCell
-        name={row.original.patient?.name}
-        email={row.original.patient?.email}
+        name={row.original.patient?.name ?? "Unknown"}
+        email={row.original.patient?.email ?? "—"}
       />
     ),
   },
@@ -35,7 +35,10 @@ export const appointmentColumns: ColumnDef<IAppointment>[] = [
     accessorKey: "schedule",
     header: "Schedule",
     cell: ({ row }) => (
-      <DateCell date={row.original.schedule?.startDateTime} formatString="MMM dd, yyyy hh:mm a" />
+      <DateCell
+        date={row.original.schedule?.startDateTime}
+        formatString="MMM dd, yyyy hh:mm a"
+      />
     ),
   },
 
@@ -49,8 +52,8 @@ export const appointmentColumns: ColumnDef<IAppointment>[] = [
         status === "COMPLETED"
           ? "default"
           : status === "CANCELED"
-          ? "destructive"
-          : "secondary";
+            ? "destructive"
+            : "secondary";
 
       return <Badge variant={variant}>{String(status)}</Badge>;
     },
@@ -62,7 +65,12 @@ export const appointmentColumns: ColumnDef<IAppointment>[] = [
     header: "Payment",
     cell: ({ row }) => {
       const ps = row.original.paymentStatus ?? "N/A";
-      const variant = ps === "PAID" ? "default" : ps === "FAILED" ? "destructive" : "secondary";
+      const variant =
+        ps === "PAID"
+          ? "default"
+          : ps === "FAILED"
+            ? "destructive"
+            : "secondary";
       return <Badge variant={variant}>{String(ps)}</Badge>;
     },
   },
@@ -71,7 +79,9 @@ export const appointmentColumns: ColumnDef<IAppointment>[] = [
     id: "createdAt",
     accessorKey: "createdAt",
     header: "Created",
-    cell: ({ row }) => <DateCell date={row.original.createdAt} formatString="MMM dd, yyyy" />, 
+    cell: ({ row }) => (
+      <DateCell date={row.original.createdAt} formatString="MMM dd, yyyy" />
+    ),
   },
 ];
 

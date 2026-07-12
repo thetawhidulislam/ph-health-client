@@ -4,6 +4,7 @@ import { Phone, CalendarDays } from "lucide-react";
 import DateCell from "@/components/shared/cell/DateCell";
 import UserInfoCell from "@/components/shared/cell/UserInfoCell";
 import StatusBadgeCell from "@/components/shared/cell/StatusBadgeCell";
+import { UserStatus } from "@/types/doctor.types";
 
 export const patientColumns: ColumnDef<IPatient>[] = [
   {
@@ -12,9 +13,9 @@ export const patientColumns: ColumnDef<IPatient>[] = [
     header: "Patient",
     cell: ({ row }) => (
       <UserInfoCell
-        name={row.original.name}
-        email={row.original.email}
-        profilePhoto={row.original.profilePhoto}
+        name={row.original.name ?? "N/A"}
+        email={row.original.email ?? "N/A"}
+        profilePhoto={row.original.profilePhoto ?? "N/A"}
       />
     ),
   },
@@ -36,7 +37,9 @@ export const patientColumns: ColumnDef<IPatient>[] = [
     id: "status",
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => <StatusBadgeCell status={row.original.user?.status} />,
+    cell: ({ row }) => (
+     <StatusBadgeCell status={(row.original.user?.status as UserStatus) ?? UserStatus.ACTIVE} />
+    ),
   },
 
   {
@@ -47,7 +50,10 @@ export const patientColumns: ColumnDef<IPatient>[] = [
       <div className="flex items-center gap-2 text-muted-foreground">
         <CalendarDays className="h-4 w-4" />
         <span>
-          <DateCell date={row.original.createdAt} formatString="MMM dd, yyyy " />
+          <DateCell
+            date={row.original.createdAt}
+            formatString="MMM dd, yyyy "
+          />
         </span>
       </div>
     ),

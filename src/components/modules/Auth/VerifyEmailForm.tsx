@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import AppField from "@/components/shared/form/AppField";
@@ -20,6 +21,7 @@ import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
+import Link from "next/link";
 
 const VerifyEmailForm = () => {
   const router = useRouter();

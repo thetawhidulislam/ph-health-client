@@ -83,7 +83,7 @@ export const changeAppointmentStatus = async (
   payload: { status: string },
 ) => {
   try {
-    return await httpClient.patch(
+    return await httpClient.patch<IAppointment>(
       `/appointments/change-appointment-status/${appointmentId}`,
       payload,
     );

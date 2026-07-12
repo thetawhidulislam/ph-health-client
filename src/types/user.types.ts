@@ -27,4 +27,8 @@ export interface UserInfo {
   role: string;
   doctor?: Doctor;
   patient?: Patient;
+  needPasswordChange?: boolean;
+  status?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }

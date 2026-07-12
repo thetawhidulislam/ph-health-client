@@ -1,9 +1,15 @@
 import AppointmentsTable from "@/components/modules/Admin/Appointment-management/AppointmentsTable";
 import { getAllAppointments } from "@/services/appointment.services";
 import { getUserInfo } from "@/services/auth.service";
-import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
-const AppointmentsManagementPage = async ({ searchParams }: {
+const AppointmentsManagementPage = async ({
+  searchParams,
+}: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
   const queryParamsObject = await searchParams;
@@ -30,7 +36,10 @@ const AppointmentsManagementPage = async ({ searchParams }: {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <AppointmentsTable initialQueryString={queryString} currentUser={currentUser} />
+      <AppointmentsTable
+        initialQueryString={queryString}
+        currentUser={currentUser ?? undefined}
+      />
     </HydrationBoundary>
   );
 };

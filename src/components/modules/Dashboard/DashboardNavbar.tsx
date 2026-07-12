@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getDefaultDashboardRoute } from "@/lib/authUtils";
+import { getDefaultDashboardRoute, UserRole } from "@/lib/authUtils";
 import { getNavItemsByRole } from "@/lib/navItems";
 import { getUserInfo } from "@/services/auth.service";
 import { NavSection } from "@/types/dashboard.type";
@@ -11,9 +11,9 @@ const DashboardNavbar = async () => {
   if (!userInfo) {
     redirect("/login");
   }
-  const navItems: NavSection[] = getNavItemsByRole(userInfo.role);
+  const navItems: NavSection[] = getNavItemsByRole(userInfo?.role as UserRole);
 
-  const dashboardHome = getDefaultDashboardRoute(userInfo.role);
+  const dashboardHome = getDefaultDashboardRoute(userInfo?.role as UserRole);
   return (
     <DashboardNavbarContent
       userInfo={userInfo}

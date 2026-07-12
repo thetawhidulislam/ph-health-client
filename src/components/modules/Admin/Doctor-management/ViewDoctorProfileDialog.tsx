@@ -179,8 +179,8 @@ const ViewDoctorProfileDialog = ({
                 <div className="rounded-lg border p-4">
                   <h3 className="mb-3 text-sm font-semibold">Specialties</h3>
                   <div className="flex flex-wrap gap-2">
-                    {doctorDetails.specialties?.length ? (
-                      doctorDetails.specialties.map((item) => (
+                    {doctorDetails.specialities?.length ? (
+                      doctorDetails.specialities.map((item) => (
                         <Badge key={item.specialty.id} variant="secondary">
                           {item.specialty.title}
                         </Badge>

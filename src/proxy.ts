@@ -100,7 +100,10 @@ export async function proxy(request: NextRequest) {
       // case 1 : user need pass chagne
       if (accessToken && email) {
         const userInfo = await getUserInfo();
-        if (userInfo.needPasswordChange) {
+        if (!userInfo) {
+          return NextResponse.redirect(new URL("/login", request.url));
+        }
+        if (userInfo?.needPasswordChange) {
           return NextResponse.next();
         } else {
           return NextResponse.redirect(

@@ -5,6 +5,7 @@ import UserInfoCell from "@/components/shared/cell/UserInfoCell";
 import StatusBadgeCell from "@/components/shared/cell/StatusBadgeCell";
 import { Badge } from "@/components/ui/badge";
 import DateCell from "@/components/shared/cell/DateCell";
+import { UserStatus } from "@/types/doctor.types";
 
 export const adminColumns: ColumnDef<IAdmin>[] = [
   {
@@ -43,7 +44,11 @@ export const adminColumns: ColumnDef<IAdmin>[] = [
     id: "status",
     accessorFn: (row) => row.user?.status,
     header: "Status",
-    cell: ({ row }) => <StatusBadgeCell status={row.original.user?.status} />,
+    cell: ({ row }) => (
+      <StatusBadgeCell
+        status={row.original.user?.status ?? UserStatus.BLOCKED}
+      />
+    ),
   },
   {
     id: "createdAt",

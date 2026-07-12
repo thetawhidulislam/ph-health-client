@@ -18,7 +18,9 @@ export const getPatients = async (queryString?: string) => {
 
     if (anyErr?.response?.status === 404) {
       try {
-        const fallbackEndpoint = queryString ? `/users?role=PATIENT&${queryString}` : "/users?role=PATIENT";
+        const fallbackEndpoint = queryString
+          ? `/users?role=PATIENT&${queryString}`
+          : "/users?role=PATIENT";
         console.log("Trying fallback endpoint:", fallbackEndpoint);
         const fallbackRes = await httpClient.get<IPatient[]>(fallbackEndpoint);
         return fallbackRes;
@@ -44,7 +46,10 @@ export const getPatientById = async (id: string) => {
 
 export const banPatient = async (id: string) => {
   try {
-    const res = await httpClient.patch<{ message: string }>(`/patients/${id}/ban`);
+    const res = await httpClient.patch<{ message: string }>(
+      `/patients/${id}/ban`,
+      {},
+    );
     return res;
   } catch (error) {
     console.log("Error banning patient:", error);
@@ -54,7 +59,10 @@ export const banPatient = async (id: string) => {
 
 export const unbanPatient = async (id: string) => {
   try {
-    const res = await httpClient.patch<{ message: string }>(`/patients/${id}/unban`);
+    const res = await httpClient.patch<{ message: string }>(
+      `/patients/${id}/unban`,
+      {},
+    );
     return res;
   } catch (error) {
     console.log("Error unbanning patient:", error);

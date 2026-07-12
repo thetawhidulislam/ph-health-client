@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic"
 import QueryProviders from "@/providers/QueryProvider";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
