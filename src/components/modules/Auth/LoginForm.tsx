@@ -34,24 +34,24 @@ const demoAccounts = [
     email: "admin@gmail.com",
     password: "12345678",
     icon: ShieldCheck,
-    accent: "text-slate-600",
-    ring: "hover:border-slate-300 hover:bg-slate-50",
+    accent: "text-slate-600 dark:text-slate-300",
+    ring: "hover:border-slate-300 hover:bg-slate-50 dark:hover:border-slate-600 dark:hover:bg-slate-800/60",
   },
   {
     role: "Doctor",
     email: "dr.mahmudhasan@gmail.com",
     password: "Doctor@789",
     icon: Stethoscope,
-    accent: "text-teal-700",
-    ring: "hover:border-teal-300 hover:bg-teal-50",
+    accent: "text-teal-700 dark:text-teal-400",
+    ring: "hover:border-teal-300 hover:bg-teal-50 dark:hover:border-teal-700 dark:hover:bg-teal-900/30",
   },
   {
     role: "Patient",
     email: "tawhidulislam200688@gmail.com",
     password: "123456789",
     icon: UserRound,
-    accent: "text-amber-600",
-    ring: "hover:border-amber-300 hover:bg-amber-50",
+    accent: "text-amber-600 dark:text-amber-400",
+    ring: "hover:border-amber-300 hover:bg-amber-50 dark:hover:border-amber-700 dark:hover:bg-amber-900/20",
   },
 ];
 
@@ -96,28 +96,28 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
   return (
     <div className="relative mx-auto w-full max-w-md">
       {/* Ambient care-glow, purely decorative */}
-      <div className="pointer-events-none absolute -top-16 -left-10 h-40 w-40 rounded-full bg-teal-200/40 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-14 -right-10 h-40 w-40 rounded-full bg-amber-200/40 blur-3xl" />
+      <div className="pointer-events-none absolute -top-16 -left-10 h-40 w-40 rounded-full bg-teal-200/40 blur-3xl dark:bg-teal-500/10" />
+      <div className="pointer-events-none absolute -bottom-14 -right-10 h-40 w-40 rounded-full bg-amber-200/40 blur-3xl dark:bg-amber-500/10" />
 
-      <Card className="relative overflow-hidden rounded-[28px] border border-teal-900/10 bg-white/90 shadow-[0_20px_60px_-15px_rgba(11,79,74,0.25)] backdrop-blur-sm animate-in fade-in-0 zoom-in-95 duration-500">
+      <Card className="relative overflow-hidden rounded-[28px] border border-teal-900/10 bg-white/90 shadow-[0_20px_60px_-15px_rgba(11,79,74,0.25)] backdrop-blur-sm animate-in fade-in-0 zoom-in-95 duration-500 dark:border-teal-100/10 dark:bg-slate-900/90 dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]">
         {/* Top accent bar */}
-        <div className="h-1.5 w-full bg-gradient-to-r from-teal-700 via-teal-500 to-amber-400" />
+        <div className="h-1.5 w-full bg-gradient-to-r from-teal-700 via-teal-500 to-amber-400 dark:from-teal-600 dark:via-teal-400 dark:to-amber-300" />
 
         <CardHeader className="pb-2 pt-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-teal-700/80">
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-teal-700/80 dark:text-teal-400/90">
             PH Healthcare
           </p>
-          <CardTitle className="mt-2 font-serif text-3xl font-semibold tracking-tight text-slate-900">
+          <CardTitle className="mt-2 font-serif text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-50">
             Welcome back to your care record
           </CardTitle>
-          <CardDescription className="mt-1 text-sm text-slate-500">
+          <CardDescription className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             Sign in to pick up right where your care team left off.
           </CardDescription>
 
           {/* Signature pulse-line divider */}
           <svg
             viewBox="0 0 400 32"
-            className="mx-auto mt-5 h-6 w-full max-w-[220px] text-teal-600/70"
+            className="mx-auto mt-5 h-6 w-full max-w-[220px] text-teal-600/70 dark:text-teal-400/70"
             fill="none"
           >
             <path
@@ -144,8 +144,8 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
             className="space-y-5"
           >
             {/* Quick demo access */}
-            <div className="rounded-2xl border border-teal-900/10 bg-teal-50/50 p-3">
-              <p className="mb-2.5 px-1 text-[11px] font-medium uppercase tracking-wide text-teal-700/70">
+            <div className="rounded-2xl border border-teal-900/10 bg-teal-50/50 p-3 dark:border-teal-100/10 dark:bg-teal-950/30">
+              <p className="mb-2.5 px-1 text-[11px] font-medium uppercase tracking-wide text-teal-700/70 dark:text-teal-400/80">
                 Quick demo access
               </p>
               <div className="grid grid-cols-3 gap-2">
@@ -162,10 +162,10 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
                           account.role,
                         )
                       }
-                      className={`flex flex-col items-center gap-1.5 rounded-xl border border-transparent bg-white px-2 py-3 text-center shadow-sm transition ${account.ring}`}
+                      className={`flex flex-col items-center gap-1.5 rounded-xl border border-transparent bg-white px-2 py-3 text-center shadow-sm transition dark:bg-slate-800 dark:shadow-none ${account.ring}`}
                     >
                       <Icon className={`size-5 ${account.accent}`} />
-                      <span className="text-xs font-semibold text-slate-800">
+                      <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">
                         {account.role}
                       </span>
                     </button>
@@ -221,7 +221,7 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
             <div className="-mt-1 text-right">
               <Link
                 href="/forgot-password"
-                className="text-sm font-medium text-teal-700 hover:underline underline-offset-4"
+                className="text-sm font-medium text-teal-700 hover:underline underline-offset-4 dark:text-teal-400"
               >
                 Forgot password?
               </Link>
@@ -241,7 +241,7 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
                   isPending={isSubmitting || isPending}
                   pendingLabel="Logging In...."
                   disabled={!canSubmit}
-                  className="h-11 w-full rounded-full bg[#353D4A] text-base font-medium tracking-wide shadow-lg shadow-teal-700/20 transition hover:bg[#313946]"
+                  className="h-11 w-full rounded-full bg-[#353D4A] text-base font-medium tracking-wide text-white shadow-lg shadow-teal-700/20 transition hover:bg-[#313946] dark:shadow-teal-500/10"
                 >
                   Log In
                 </AppSubmitButton>
@@ -251,10 +251,10 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
 
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-200" />
+              <div className="w-full border-t border-slate-200 dark:border-slate-700" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="bg-white px-3 uppercase tracking-wide text-slate-400">
+              <span className="bg-white px-3 uppercase tracking-wide text-slate-400 dark:bg-slate-900 dark:text-slate-500">
                 Or continue with
               </span>
             </div>
@@ -262,7 +262,7 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
 
           <Button
             variant="outline"
-            className="h-11 w-full rounded-full border-slate-200 font-medium hover:bg-slate-50"
+            className="h-11 w-full rounded-full border-slate-200 font-medium hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
             onClick={() => {
               const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
               window.location.href = `${baseUrl}/auth/login/google`;
@@ -290,12 +290,12 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
           </Button>
         </CardContent>
 
-        <CardFooter className="justify-center border-t border-slate-100 pt-4">
-          <p className="text-sm text-slate-500">
+        <CardFooter className="justify-center border-t border-slate-100 pt-4 dark:border-slate-800">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             Don&apos;t have an account?{" "}
             <Link
               href="/register"
-              className="font-medium text-teal-700 hover:underline underline-offset-4"
+              className="font-medium text-teal-700 hover:underline underline-offset-4 dark:text-teal-400"
             >
               Sign Up for an account
             </Link>

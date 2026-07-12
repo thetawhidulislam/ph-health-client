@@ -7,8 +7,9 @@ import { getUserInfo } from "@/services/auth.service";
 import { getDoctorById } from "@/services/doctor.service";
 import { type IDoctorDetails } from "@/types/doctor.types";
 import { format } from "date-fns";
-import {  Clock3, Star, Stethoscope } from "lucide-react";
+import { Clock3, Star, Stethoscope } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 const formatDateTime = (value?: string | Date | null) => {
   if (!value) {
@@ -49,6 +50,10 @@ const ConsultationDoctorByIdPage = async ({
 }) => {
   const { id } = await params;
   const currentUser = await getUserInfo();
+
+  if (!currentUser) {
+    redirect(`/login?redirectPath=/consultation/${id}`);
+  }
 
   let doctorDetails: IDoctorDetails | null = null;
   let errorMessage = "";
@@ -141,30 +146,53 @@ const ConsultationDoctorByIdPage = async ({
                   {doctorDetails.designation || "Specialist"}
                 </p>
                 <p className="text-sm text-slate-300">
-                  {doctorDetails.currentWorkingPlace || "Care available online and in clinic"}
+                  {doctorDetails.currentWorkingPlace ||
+                    "Care available online and in clinic"}
                 </p>
               </div>
 
               <div className="flex flex-wrap gap-2">
                 {(doctorDetails.specialities ?? []).map((item) => (
-                  <Badge key={item.specialty.id} variant="secondary" className="bg-white/15 text-white hover:bg-white/20">
+                  <Badge
+                    key={item.specialty.id}
+                    variant="secondary"
+                    className="bg-white/15 text-white hover:bg-white/20"
+                  >
                     {item.specialty.title}
                   </Badge>
                 ))}
-                {(!doctorDetails.specialities || doctorDetails.specialities.length === 0) && (
-                  <Badge variant="secondary" className="bg-white/15 text-white hover:bg-white/20">General care</Badge>
+                {(!doctorDetails.specialities ||
+                  doctorDetails.specialities.length === 0) && (
+                  <Badge
+                    variant="secondary"
+                    className="bg-white/15 text-white hover:bg-white/20"
+                  >
+                    General care
+                  </Badge>
                 )}
               </div>
 
               <div className="flex flex-wrap gap-2 pt-1 text-xs">
-                <Badge variant="outline" className="border-white/25 bg-white/10 text-white">
-                  <Clock3 className="mr-1 h-3.5 w-3.5" /> {doctorDetails.experience ?? 0} yrs experience
+                <Badge
+                  variant="outline"
+                  className="border-white/25 bg-white/10 text-white"
+                >
+                  <Clock3 className="mr-1 h-3.5 w-3.5" />{" "}
+                  {doctorDetails.experience ?? 0} yrs experience
                 </Badge>
-                <Badge variant="outline" className="border-white/25 bg-white/10 text-white">
-                  <Stethoscope className="mr-1 h-3.5 w-3.5" /> ${doctorDetails.appointmentFee?.toFixed(2) ?? "N/A"}
+                <Badge
+                  variant="outline"
+                  className="border-white/25 bg-white/10 text-white"
+                >
+                  <Stethoscope className="mr-1 h-3.5 w-3.5" /> $
+                  {doctorDetails.appointmentFee?.toFixed(2) ?? "N/A"}
                 </Badge>
-                <Badge variant="outline" className="border-white/25 bg-white/10 text-white">
-                  <Star className="mr-1 h-3.5 w-3.5" /> {doctorDetails.averageRating?.toFixed(1) ?? "0.0"}
+                <Badge
+                  variant="outline"
+                  className="border-white/25 bg-white/10 text-white"
+                >
+                  <Star className="mr-1 h-3.5 w-3.5" />{" "}
+                  {doctorDetails.averageRating?.toFixed(1) ?? "0.0"}
                 </Badge>
               </div>
             </div>
@@ -295,7 +323,7 @@ const ConsultationDoctorByIdPage = async ({
           )}
         </div>
       </div>
-         <Footer />
+      <Footer />
     </section>
   );
 };

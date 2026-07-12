@@ -24,11 +24,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
-
 interface RegisterFormProps {
   redirectPath?: string;
 }
-
 
 const RegisterForm = ({ redirectPath }: RegisterFormProps) => {
   const [serverError, setServerError] = useState<string | null>(null);
@@ -65,25 +63,25 @@ const RegisterForm = ({ redirectPath }: RegisterFormProps) => {
 
   return (
     <div className="relative mx-auto w-full max-w-md">
-      <div className="pointer-events-none absolute -top-16 -left-10 h-40 w-40 rounded-full bg-amber-200/40 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-14 -right-10 h-40 w-40 rounded-full bg-teal-200/40 blur-3xl" />
+      <div className="pointer-events-none absolute -top-16 -left-10 h-40 w-40 rounded-full bg-amber-200/40 blur-3xl dark:bg-amber-500/10" />
+      <div className="pointer-events-none absolute -bottom-14 -right-10 h-40 w-40 rounded-full bg-teal-200/40 blur-3xl dark:bg-teal-500/10" />
 
-      <Card className="relative overflow-hidden rounded-[28px] border border-teal-900/10 bg-white/90 shadow-[0_20px_60px_-15px_rgba(11,79,74,0.25)] backdrop-blur-sm animate-in fade-in-0 zoom-in-95 duration-500">
-        <div className="h-1.5 w-full bg-gradient-to-r from-amber-500 via-amber-400 to-teal-400" />
+      <Card className="relative overflow-hidden rounded-[28px] border border-teal-900/10 bg-white/90 shadow-[0_20px_60px_-15px_rgba(11,79,74,0.25)] backdrop-blur-sm animate-in fade-in-0 zoom-in-95 duration-500 dark:border-teal-100/10 dark:bg-slate-900/90 dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]">
+        <div className="h-1.5 w-full bg-gradient-to-r from-amber-500 via-amber-400 to-teal-400 dark:from-amber-400 dark:via-amber-300 dark:to-teal-300" />
 
         <CardHeader className="pb-2 pt-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-amber-700/80">
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-amber-700/80 dark:text-amber-400/90">
             PH Healthcare
           </p>
-          <CardTitle className="mt-2 font-serif text-3xl font-semibold tracking-tight text-slate-900">
+          <CardTitle className="mt-2 font-serif text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-50">
             Create your patient account
           </CardTitle>
-          <CardDescription className="mt-1 text-sm text-slate-500">
+          <CardDescription className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             Register to manage appointments, prescriptions, and your profile.
           </CardDescription>
           <svg
             viewBox="0 0 400 32"
-            className="mx-auto mt-5 h-6 w-full max-w-[220px] text-amber-600/70"
+            className="mx-auto mt-5 h-6 w-full max-w-[220px] text-amber-600/70 dark:text-amber-400/70"
             fill="none"
           >
             <path
@@ -186,13 +184,15 @@ const RegisterForm = ({ redirectPath }: RegisterFormProps) => {
               </Alert>
             )}
 
-            <form.Subscribe selector={(s) => [s.canSubmit, s.isSubmitting] as const}>
+            <form.Subscribe
+              selector={(s) => [s.canSubmit, s.isSubmitting] as const}
+            >
               {([canSubmit, isSubmitting]) => (
                 <AppSubmitButton
                   isPending={isSubmitting || isPending}
                   pendingLabel="Registering..."
                   disabled={!canSubmit}
-                  className="h-11 w-full rounded-full bg-[#353D4A] text-base font-medium tracking-wide shadow-lg shadow-amber-700/20 transition hover:bg-[#313946]"
+                  className="h-11 w-full rounded-full bg-[#353D4A] text-base font-medium tracking-wide text-white shadow-lg shadow-amber-700/20 transition hover:bg-[#313946] dark:shadow-amber-500/10"
                 >
                   Create Account
                 </AppSubmitButton>
@@ -202,10 +202,10 @@ const RegisterForm = ({ redirectPath }: RegisterFormProps) => {
 
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-200" />
+              <div className="w-full border-t border-slate-200 dark:border-slate-700" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="bg-white px-3 uppercase tracking-wide text-slate-400">
+              <span className="bg-white px-3 uppercase tracking-wide text-slate-400 dark:bg-slate-900 dark:text-slate-500">
                 Already have an account?
               </span>
             </div>
@@ -213,7 +213,7 @@ const RegisterForm = ({ redirectPath }: RegisterFormProps) => {
 
           <Button
             variant="outline"
-            className="h-11 w-full rounded-full border-slate-200 font-medium hover:bg-slate-50"
+            className="h-11 w-full rounded-full border-slate-200 font-medium hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
             onClick={() => {
               const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
               window.location.href = `${baseUrl}/auth/login/google`;
@@ -241,12 +241,12 @@ const RegisterForm = ({ redirectPath }: RegisterFormProps) => {
           </Button>
         </CardContent>
 
-        <CardFooter className="justify-center border-t border-slate-100 pt-4">
-          <p className="text-sm text-slate-500">
+        <CardFooter className="justify-center border-t border-slate-100 pt-4 dark:border-slate-800">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             Already have an account?{" "}
             <Link
               href="/login"
-              className="font-medium text-amber-700 hover:underline underline-offset-4"
+              className="font-medium text-amber-700 hover:underline underline-offset-4 dark:text-amber-400"
             >
               Log in
             </Link>
