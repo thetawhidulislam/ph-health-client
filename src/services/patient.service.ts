@@ -1,6 +1,8 @@
 "use server";
 
+import { UserRole } from "@/lib/authUtils";
 import { httpClient } from "@/lib/axios/httpClient";
+import { ApiResponse } from "@/types/api.types";
 import { IPatient, IPatientDetails } from "@/types/patient.types";
 
 export const getPatients = async (queryString?: string) => {
@@ -44,28 +46,39 @@ export const getPatientById = async (id: string) => {
   }
 };
 
-export const banPatient = async (id: string) => {
-  try {
-    const res = await httpClient.patch<{ message: string }>(
-      `/patients/${id}/ban`,
-      {},
-    );
-    return res;
-  } catch (error) {
-    console.log("Error banning patient:", error);
-    throw error;
-  }
+// ⚠️ Backend has no dedicated ban/unban route for patients.
+// It only exposes a generic status-change endpoint:
+//   PATCH /admin/change-user-status   body: { userId, userStatus }
+// So "ban" = set status to a blocked/inactive value, "unban" = set back to ACTIVE.
+//
+// NOTE: `userId` here must be the *User* table's id (the patient's account/user id),
+// NOT the patient's own record id — same id/userId split we already found on
+// Doctor and Admin. Make sure the caller passes `patient.userId`, not `patient.id`.
+//
+// NOTE 2: Confirm the exact UserStatus enum value used for "banned" in your
+// generated Prisma enums (e.g. it might be `BLOCKED`, `INACTIVE`, or `SUSPENDED`
+// instead of the `"BLOCKED"` used below) and adjust if needed.
+
+export const banPatient = async (
+  userId: string,
+): Promise<ApiResponse<{ message: string }>> => {
+  return await httpClient.patch<{ message: string }>(
+    "/admin/change-user-status",
+    {
+      userId,
+      userStatus: "BLOCKED", // ⚠️ verify this matches your UserStatus enum
+    },
+  );
 };
 
-export const unbanPatient = async (id: string) => {
-  try {
-    const res = await httpClient.patch<{ message: string }>(
-      `/patients/${id}/unban`,
-      {},
-    );
-    return res;
-  } catch (error) {
-    console.log("Error unbanning patient:", error);
-    throw error;
-  }
+export const unbanPatient = async (
+  userId: string,
+): Promise<ApiResponse<{ message: string }>> => {
+  return await httpClient.patch<{ message: string }>(
+    "/admin/change-user-status",
+    {
+      userId,
+      userStatus: "ACTIVE",
+    },
+  );
 };

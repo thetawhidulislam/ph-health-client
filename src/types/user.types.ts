@@ -20,6 +20,14 @@ interface Patient {
   contactNumber: string;
   address: string;
 }
+interface Admin {
+  id: string;
+  name: string;
+  email: string;
+  profilePhoto: string;
+  contactNumber: string;
+  address: string;
+}
 export interface UserInfo {
   id: string;
   name: string;
@@ -27,6 +35,7 @@ export interface UserInfo {
   role: string;
   doctor?: Doctor;
   patient?: Patient;
+  admin?: Admin;
   needPasswordChange?: boolean;
   status?: string;
   createdAt?: string;

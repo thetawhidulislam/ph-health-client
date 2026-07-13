@@ -279,29 +279,27 @@ const DoctorsList = ({
   return (
     <section className="space-y-6 pb-8">
       <div className="relative overflow-hidden rounded-[32px] border border-border bg-linear-to-br from-primary/10 via-background to-primary/5 p-8 shadow-lg">
-  {/* Background Effects */}
-  <div className="absolute -right-16 -top-16 h-52 w-52 rounded-full bg-primary/10 blur-3xl" />
-  <div className="absolute -bottom-16 -left-16 h-44 w-44 rounded-full bg-primary/10 blur-3xl" />
+        {/* Background Effects */}
+        <div className="absolute -right-16 -top-16 h-52 w-52 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute -bottom-16 -left-16 h-44 w-44 rounded-full bg-primary/10 blur-3xl" />
 
-  <div className="relative">
-    <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
-      Find Your Doctor
-    </span>
+        <div className="relative">
+          <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
+            Find Your Doctor
+          </span>
 
-    <h1 className="mt-6 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
-      Consult With Our
-      <span className="text-primary"> Specialists</span>
-    </h1>
+          <h1 className="mt-6 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+            Consult With Our
+            <span className="text-primary"> Specialists</span>
+          </h1>
 
-    <p className="mt-5 max-w-3xl text-base leading-7 text-muted-foreground">
-      Discover trusted doctors, compare experience, consultation fees, ratings,
-      and patient reviews. Explore detailed profiles to find the right
-      specialist for your healthcare needs.
-    </p>
-
-   
-  </div>
-</div>
+          <p className="mt-5 max-w-3xl text-base leading-7 text-muted-foreground">
+            Discover trusted doctors, compare experience, consultation fees,
+            ratings, and patient reviews. Explore detailed profiles to find the
+            right specialist for your healthcare needs.
+          </p>
+        </div>
+      </div>
 
       <div className="rounded-2xl border bg-card p-4 shadow-sm sm:p-5">
         <div className="flex flex-wrap items-start gap-3">

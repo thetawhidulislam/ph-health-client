@@ -32,9 +32,9 @@ const MyProfileForm = ({
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-const [imagePreview, setImagePreview] = useState<string | null>(
-  initialValues.profilePhoto || null,
-);
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    initialValues.profilePhoto || null,
+  );
 
   const role = currentUser.role?.toUpperCase();
 
@@ -164,20 +164,23 @@ const [imagePreview, setImagePreview] = useState<string | null>(
               )}
             </form.Field>
 
-            <form.Field
-              name="address"
-              validators={{
-                onChange: updateProfileFormZodSchema.shape.address as any,
-              }}
-            >
-              {(field) => (
-                <AppField
-                  field={field}
-                  label="Address"
-                  placeholder="Enter your address"
-                />
-              )}
-            </form.Field>
+            {/* Address — Admin/Super Admin has no address field on the backend, so hide it for those roles */}
+            {role !== "ADMIN" && role !== "SUPER_ADMIN" && (
+              <form.Field
+                name="address"
+                validators={{
+                  onChange: updateProfileFormZodSchema.shape.address as any,
+                }}
+              >
+                {(field) => (
+                  <AppField
+                    field={field}
+                    label="Address"
+                    placeholder="Enter your address"
+                  />
+                )}
+              </form.Field>
+            )}
 
             {role === "DOCTOR" && (
               <>

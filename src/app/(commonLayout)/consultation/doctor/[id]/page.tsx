@@ -7,7 +7,7 @@ import { getUserInfo } from "@/services/auth.service";
 import { getDoctorById } from "@/services/doctor.service";
 import { type IDoctorDetails } from "@/types/doctor.types";
 import { format } from "date-fns";
-import { Clock3, Star, Stethoscope } from "lucide-react";
+import { ArrowLeft, Clock3, Star, Stethoscope } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -49,6 +49,7 @@ const ConsultationDoctorByIdPage = async ({
   params: Promise<{ id: string }>;
 }) => {
   const { id } = await params;
+  console.log(id);
   const currentUser = await getUserInfo();
 
   if (!currentUser) {
@@ -60,6 +61,7 @@ const ConsultationDoctorByIdPage = async ({
 
   try {
     const response = await getDoctorById(id);
+    console.log(response);
     doctorDetails = response.data;
   } catch (error) {
     if (
@@ -82,9 +84,15 @@ const ConsultationDoctorByIdPage = async ({
 
   if (!doctorDetails) {
     return (
-      <section className="space-y-4">
+      <section className="mx-auto max-w-7xl space-y-4 px-4 py-6 sm:px-6 lg:px-8">
         <Link href="/consultation">
-          <Button variant="outline">Back to Consultation</Button>
+          <Button
+            variant="ghost"
+            className="gap-2 pl-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Consultation
+          </Button>
         </Link>
         <div className="rounded-md border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
           {errorMessage || "Doctor details not available."}
@@ -121,7 +129,13 @@ const ConsultationDoctorByIdPage = async ({
   return (
     <section className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
       <Link href="/consultation">
-        <Button variant="outline">Back to Consultation</Button>
+        <Button
+          variant="ghost"
+          className="gap-2 pl-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Consultation
+        </Button>
       </Link>
 
       <div className="relative overflow-hidden rounded-3xl border bg-linear-to-br from-[#202938] via-[#2b3548] to-[#465468] p-6 text-white shadow-lg">
@@ -198,7 +212,7 @@ const ConsultationDoctorByIdPage = async ({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+          <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur [&_button]:bg-white [&_button]:text-slate-900 [&_button]:font-semibold [&_button]:shadow-md [&_button]:hover:bg-slate-100 [&_button]:transition-colors">
             <BookAppointmentModal
               doctorId={String(doctorDetails.id)}
               doctorName={doctorDetails.name}

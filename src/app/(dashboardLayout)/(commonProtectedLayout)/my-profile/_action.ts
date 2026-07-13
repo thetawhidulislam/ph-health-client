@@ -11,7 +11,7 @@ export type ProfileFormValues = {
   contactNumber?: string;
   address?: string;
   registrationNumber?: string;
-  profilePhoto?:string;
+  profilePhoto?: string;
   appointmentFee?: number;
   qualification?: string;
   currentWorkingPlace?: string;
@@ -33,7 +33,7 @@ export const updateMyProfileAction: UpdateProfileAction = async ({
 }): Promise<ApiResponse<unknown> | ApiErrorResponse> => {
   try {
     const role = user.role?.toUpperCase();
-    console.log(user.id);
+
     if (role === "PATIENT") {
       const payload = {
         patientInfo: {
@@ -64,9 +64,11 @@ export const updateMyProfileAction: UpdateProfileAction = async ({
             ? { registrationNumber: values.registrationNumber }
             : {}),
           ...(values.gender
-            ? { gender: values.gender === "MALE" ? Gender.MALE : Gender.FEMALE }
+            ? {
+                gender: values.gender === "MALE" ? Gender.MALE : Gender.FEMALE,
+              }
             : {}),
-             ...(values.profilePhoto ? { profilePhoto: values.profilePhoto } : {}),
+          ...(values.profilePhoto ? { profilePhoto: values.profilePhoto } : {}),
           ...(typeof values.appointmentFee === "number"
             ? { appointmentFee: values.appointmentFee }
             : {}),
@@ -103,11 +105,23 @@ export const updateMyProfileAction: UpdateProfileAction = async ({
       message: "Unsupported role for profile update.",
     };
   } catch (error: unknown) {
+    if (
+      error &&
+      typeof error === "object" &&
+      "response" in error &&
+      error.response &&
+      typeof error.response === "object" &&
+      "data" in error.response &&
+      error.response.data &&
+      typeof error.response.data === "object" &&
+      "message" in error.response.data &&
+      typeof error.response.data.message === "string"
+    ) {
+      return { success: false, message: error.response.data.message };
+    }
+
     if (error instanceof Error) {
-      return {
-        success: false,
-        message: error.message,
-      };
+      return { success: false, message: error.message };
     }
 
     return {

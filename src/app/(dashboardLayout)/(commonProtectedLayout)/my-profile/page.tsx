@@ -6,6 +6,7 @@ const MyProfilePage = async () => {
   const currentUser = await getUserInfo();
   const doctorinfo = currentUser?.doctor;
   const patientinfo = currentUser?.patient;
+  const admininfo = currentUser?.admin;
 
   if (!currentUser) {
     return (
@@ -59,6 +60,15 @@ const MyProfilePage = async () => {
       patientinfo.profilePhoto ?? initialValues.profilePhoto;
     initialValues.contactNumber = patientinfo.contactNumber ?? "";
     initialValues.address = patientinfo.address ?? "";
+  }
+
+  if ((role === "ADMIN" || role === "SUPER_ADMIN") && admininfo) {
+    initialValues.name = admininfo.name ?? initialValues.name;
+    initialValues.email = admininfo.email ?? initialValues.email;
+    initialValues.contactNumber = admininfo.contactNumber ?? "";
+    initialValues.profilePhoto =
+      admininfo.profilePhoto ?? initialValues.profilePhoto;
+    // Admin model has no `address` field — intentionally not set here
   }
 
   return (

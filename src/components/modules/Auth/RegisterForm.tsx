@@ -151,6 +151,7 @@ const RegisterForm = ({ redirectPath }: RegisterFormProps) => {
                       type="button"
                       variant="ghost"
                       size="icon"
+                      className="h-7 w-7 text-muted-foreground hover:bg-transparent hover:text-foreground"
                       onClick={() => setShowPassword((value) => !value)}
                     >
                       {showPassword ? (

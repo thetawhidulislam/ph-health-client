@@ -3,8 +3,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Phone, CalendarDays } from "lucide-react";
 import DateCell from "@/components/shared/cell/DateCell";
 import UserInfoCell from "@/components/shared/cell/UserInfoCell";
-import StatusBadgeCell from "@/components/shared/cell/StatusBadgeCell";
 import { UserStatus } from "@/types/doctor.types";
+import ChangePatientStatusControl from "./ChangePatientStatusControl";
 
 export const patientColumns: ColumnDef<IPatient>[] = [
   {
@@ -38,7 +38,12 @@ export const patientColumns: ColumnDef<IPatient>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
-     <StatusBadgeCell status={(row.original.user?.status as UserStatus) ?? UserStatus.ACTIVE} />
+      <ChangePatientStatusControl
+        userId={row.original.user?.id ?? ""}
+        currentStatus={
+          (row.original.user?.status as UserStatus) ?? UserStatus.ACTIVE
+        }
+      />
     ),
   },
 

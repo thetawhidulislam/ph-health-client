@@ -86,18 +86,22 @@ const BookAppointmentModal = ({
   }, [data?.data?.doctorSchedules]);
 
   const handleProceed = () => {
-    if (!selectedScheduleId) {
-      toast.error("Select a schedule slot first");
+    // ✅ Auth check first — unauthenticated users go straight to login,
+    // regardless of whether they've picked a schedule yet.
+    if (!isAuthenticated) {
+      setOpen(false);
+      const fallbackPath = selectedScheduleId
+        ? `/dashboard/book-appointments?doctorId=${encodeURIComponent(
+            doctorId,
+          )}&scheduleId=${encodeURIComponent(selectedScheduleId)}`
+        : `/consultation/doctor/${doctorId}`;
+      router.push(`/login?redirect=${encodeURIComponent(fallbackPath)}`);
       return;
     }
 
-    const targetPath = `/dashboard/book-appointments?doctorId=${encodeURIComponent(
-      doctorId,
-    )}&scheduleId=${encodeURIComponent(selectedScheduleId)}`;
-
-    if (!isAuthenticated) {
-      setOpen(false);
-      router.push(`/login?redirect=${encodeURIComponent(targetPath)}`);
+    // ✅ Schedule check happens only for authenticated users
+    if (!selectedScheduleId) {
+      toast.error("Select a schedule slot first");
       return;
     }
 
@@ -105,6 +109,10 @@ const BookAppointmentModal = ({
       toast.error("Only patient accounts can book appointments");
       return;
     }
+
+    const targetPath = `/dashboard/book-appointments?doctorId=${encodeURIComponent(
+      doctorId,
+    )}&scheduleId=${encodeURIComponent(selectedScheduleId)}`;
 
     setOpen(false);
     router.push(targetPath);
@@ -114,10 +122,12 @@ const BookAppointmentModal = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {/* ❌ NO asChild */}
       <DialogTrigger
         render={
-          <Button type="button" variant="outline" className={triggerClassName}>
+          <Button
+            type="button"
+            className={`gap-2 font-medium shadow-sm ${triggerClassName ?? ""}`}
+          >
             <CalendarPlus className="size-4" />
             Book Appointment
           </Button>
@@ -190,7 +200,6 @@ const BookAppointmentModal = ({
         </ScrollArea>
 
         <DialogFooter className="border-t px-6 py-4">
-          {/* ❌ NO DialogClose asChild */}
           <Button
             type="button"
             variant="outline"

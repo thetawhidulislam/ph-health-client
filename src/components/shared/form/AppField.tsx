@@ -54,7 +54,7 @@ const AppField = ({
 
       <div className="relative">
         {prepend && (
-          <div className="absolute inset-y-0 left-0 items-center pl-3 pointer-events-none z-10">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none z-10">
             {prepend}
           </div>
         )}
@@ -71,26 +71,27 @@ const AppField = ({
           aria-describedby={hasError ? `${field.name}-error` : undefined}
           className={cn(
             prepend && "pl-10",
-            append && "pr-10",
+            append && "pr-9",
             hasError && "border-destructive focus-visible:ring-destructive/20",
           )}
         />
 
         {append && (
-          <div className="absolute inset-y-0 right-0 items-center pr-3 pointer-events-none z-10">
+          <div className="absolute inset-y-0 right-0 flex items-center pr-1 z-10">
             {append}
           </div>
         )}
-        {hasError && (
-          <p
-            id={`${field.name}-error`}
-            role="alert"
-            className="text-sm text-destructive"
-          >
-            {firstError}
-          </p>
-        )}
       </div>
+
+      {hasError && (
+        <p
+          id={`${field.name}-error`}
+          role="alert"
+          className="text-sm text-destructive"
+        >
+          {firstError}
+        </p>
+      )}
     </div>
   );
 };
