@@ -11,6 +11,7 @@ import { getPatients } from "@/services/patient.service";
 import { useRowActionModalState } from "@/hooks/useRowActionModalState";
 import BanPatientConfirmationDialog from "./BanPatientConfirmationDialog";
 import ViewPatientProfileDialog from "./ViewPatientProfileDialog";
+import DeletePatientConfirmationDialog from "./DeletePatientConfirmationDialog";
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 10;
@@ -57,7 +58,12 @@ const PatientsTable = ({
         actions={tableActions}
       />
 
-      <BanPatientConfirmationDialog
+      {/* <BanPatientConfirmationDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={onDeleteOpenChange}
+        patient={deletingItem}
+      /> */}
+      <DeletePatientConfirmationDialog
         open={isDeleteDialogOpen}
         onOpenChange={onDeleteOpenChange}
         patient={deletingItem}

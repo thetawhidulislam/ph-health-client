@@ -8,6 +8,7 @@ import {
   IChangeUserStatusPayload,
   IUpdateAdminPayload,
 } from "@/types/admin.types";
+import { IPatientDetails } from "@/types/patient.types";
 
 export const getAdmins = async (queryString?: string) => {
   const endpoint = queryString ? `/admin?${queryString}` : "/admin";
@@ -28,6 +29,16 @@ export const updateAdmin = async (id: string, payload: IUpdateAdminPayload) => {
 export const deleteAdmin = async (id: string) => {
   const response = await httpClient.delete<{ message: string }>(`/admin/${id}`);
   return response;
+};
+
+export const deletePatientById = async (id: string) => {
+  try {
+    const res = await httpClient.delete<IPatientDetails>(`/patients/${id}`);
+    return res;
+  } catch (error) {
+    console.log("Error fetching patient:", error);
+    throw error;
+  }
 };
 
 export const changeUserStatus = async (payload: IChangeUserStatusPayload) => {
