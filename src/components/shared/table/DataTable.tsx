@@ -185,7 +185,7 @@ const DataTable = <TData,>({ data = [] as TData[], columns, actions, toolbarActi
         )}
 
         {/* // Table */}
-        <div className="rounded-lg border">
+        <div className="w-full overflow-x-auto rounded-lg border scrollbar-hide">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((hg) => (

@@ -145,10 +145,10 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
           >
             {/* Quick demo access */}
             <div className="rounded-2xl border border-teal-900/10 bg-teal-50/50 p-3 dark:border-teal-100/10 dark:bg-teal-950/30">
-              <p className="mb-2.5 px-1 text-[11px] font-medium uppercase tracking-wide text-teal-700/70 dark:text-teal-400/80">
+              <p className="mb-3 px-1 text-xs font-medium uppercase tracking-wide text-teal-700/70 dark:text-teal-400/80">
                 Quick demo access
               </p>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
                 {demoAccounts.map((account) => {
                   const Icon = account.icon;
                   return (
@@ -162,9 +162,9 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
                           account.role,
                         )
                       }
-                      className={`flex flex-col items-center gap-1.5 rounded-xl border border-transparent bg-white px-2 py-3 text-center shadow-sm transition dark:bg-slate-800 dark:shadow-none ${account.ring}`}
+                      className={`flex flex-col items-center gap-1 sm:gap-1.5 rounded-xl border border-transparent bg-white px-1.5 sm:px-2 py-2 sm:py-3 text-center shadow-sm transition dark:bg-slate-800 dark:shadow-none ${account.ring}`}
                     >
-                      <Icon className={`size-5 ${account.accent}`} />
+                      <Icon className={`size-4 sm:size-5 ${account.accent}`} />
                       <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">
                         {account.role}
                       </span>

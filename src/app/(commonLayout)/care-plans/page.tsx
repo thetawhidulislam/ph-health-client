@@ -47,7 +47,7 @@ export default async function CarePlansPage() {
         </div>
       </section>
 
-      <section className="grid gap-6 md:grid-cols-3">
+      <section className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {plans.map((plan) => (
           <Card key={plan.title} className="border-border/70 shadow-sm">
             <CardHeader>

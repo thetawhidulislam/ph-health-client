@@ -32,7 +32,7 @@ export function SiteNavbarAuthActions({
     return (
       <button
         onClick={() => router.push("/login")}
-        className="inline-flex h-10 items-center justify-center rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+        className="inline-flex h-9 items-center justify-center rounded-full bg-primary px-3 text-xs font-medium text-primary-foreground hover:bg-primary/90 sm:h-10 sm:px-4 sm:text-sm"
       >
         Sign in
       </button>
@@ -52,20 +52,20 @@ export function SiteNavbarAuthActions({
   };
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-2 text-sm font-medium hover:bg-muted">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 font-semibold text-primary">
+      <DropdownMenuTrigger className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2 py-1 text-xs font-medium hover:bg-muted sm:gap-2 sm:px-3 sm:py-2 sm:text-sm">
+        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary sm:h-8 sm:w-8 sm:text-sm">
           {user.name?.charAt(0).toUpperCase() ?? "U"}
         </div>
 
         <span className="hidden sm:block">{user.name}</span>
 
-        <ChevronDown className="h-4 w-4" />
+        <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4" />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-60">
+      <DropdownMenuContent align="end" className="w-56 sm:w-60">
         <DropdownMenuLabel>
           <div className="space-y-1">
-            <h4 className="font-medium">{user.name}</h4>
+            <h4 className="text-sm font-medium sm:text-base">{user.name}</h4>
             <p className="text-xs text-muted-foreground">{user.email}</p>
           </div>
         </DropdownMenuLabel>
@@ -74,7 +74,7 @@ export function SiteNavbarAuthActions({
 
         <DropdownMenuItem
           onClick={() => router.push(dashboardHref)}
-          className="cursor-pointer"
+          className="cursor-pointer text-xs sm:text-sm"
         >
           <LayoutDashboard className="h-4 w-4" />
           Dashboard
@@ -82,7 +82,7 @@ export function SiteNavbarAuthActions({
 
         <DropdownMenuItem
           onClick={() => router.push("/my-profile")}
-          className="cursor-pointer"
+          className="cursor-pointer text-xs sm:text-sm"
         >
           <UserRound className="h-4 w-4" />
           My Profile
@@ -93,7 +93,7 @@ export function SiteNavbarAuthActions({
         <DropdownMenuItem
           variant="destructive"
           onClick={handleLogout}
-          className="cursor-pointer"
+          className="cursor-pointer text-xs sm:text-sm"
         >
           <LogOut className="h-4 w-4" />
           Logout

@@ -170,7 +170,7 @@ export default function DoctorDashboardPage() {
       </Card>
 
       {/* Quick Actions */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {quickActions.map((action) => {
           const Icon = action.icon;
           return (
@@ -188,8 +188,8 @@ export default function DoctorDashboardPage() {
         })}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="grid gap-4 sm:grid-cols-2 lg:col-span-2">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-3">
+        <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 md:col-span-2">
           {isAnyLoading ? (
             <>
               <Skeleton className="h-28 w-full rounded-xl" />

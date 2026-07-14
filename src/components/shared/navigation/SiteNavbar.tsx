@@ -7,6 +7,7 @@ import { type UserInfo } from "@/types/user.types";
 import { ThemeToggle } from "../theme-toggle";
 import { SiteNavbarAuthActions } from "./SiteNavbarAuthActions";
 import { SiteNavbarLinks } from "./SiteNavbarLinks";
+import { SiteNavbarMobile } from "./SiteNavbarMobile";
 
 const publicNavItems = [
   { title: "About", href: "/about" },
@@ -30,24 +31,34 @@ export async function SiteNavbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/90 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-            <Stethoscope className="h-5 w-5" />
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-3 py-3 sm:px-6 sm:py-4 lg:px-8">
+        <Link href="/" className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary text-primary-foreground sm:h-10 sm:w-10">
+            <Stethoscope className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+          <div className="hidden sm:block">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground sm:text-sm">
               PH Healthcare
             </p>
-            <p className="text-base font-semibold">Care that connects</p>
+            <p className="text-sm font-semibold sm:text-base">Care that connects</p>
+          </div>
+          <div className="block sm:hidden">
+            <p className="text-xs font-semibold">PH</p>
           </div>
         </Link>
 
         <SiteNavbarLinks items={publicNavItems} />
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <ThemeToggle />
-          <SiteNavbarAuthActions user={user} dashboardHref={dashboardHref} />
+          <div className="hidden sm:block">
+            <SiteNavbarAuthActions user={user} dashboardHref={dashboardHref} />
+          </div>
+          <SiteNavbarMobile
+            items={publicNavItems}
+            user={user}
+            dashboardHref={dashboardHref}
+          />
         </div>
       </div>
     </header>

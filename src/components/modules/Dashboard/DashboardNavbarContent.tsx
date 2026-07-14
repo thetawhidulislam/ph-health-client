@@ -36,7 +36,7 @@ const DashboardNavbarContent = ({dashboardHome, navItems, userInfo} : DashboardN
     }, []);
 
   return (
-    <div className="flex items-center gap-4 w-full px-4 py-3 border-b bg-background">
+    <div className="flex items-center gap-2 sm:gap-3 w-full px-2 sm:px-4 py-2 sm:py-3 border-b bg-background">
       {/* Mobile Menu Toggle Button And Menu */}
       <Sheet open={isOpen && isMobile} onOpenChange={setIsOpen}>
           <SheetTrigger className="md:hidden" aria-label="Open menu">
@@ -50,16 +50,16 @@ const DashboardNavbarContent = ({dashboardHome, navItems, userInfo} : DashboardN
 
 
       {/* Search Component */}
-      <div className="flex-1 flex items-center">
+      <div className="flex-1 flex items-center min-w-0">
           <div className="relative w-full hidden sm:block">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"/>
-              <Input type="text" placeholder="Search..." className="pl-9 pr-4" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground"/>
+              <Input type="text" placeholder="Search..." className="pl-8 sm:pl-9 pr-3 sm:pr-4 text-sm" />
           </div>
       </div>
 
 
       {/* Right Side Actions */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* Notification */}
           <NotificationDropdown/>
 

@@ -55,7 +55,7 @@ const ViewMyScheduleDialog = ({
 }: ViewMyScheduleDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] w-[calc(100vw-1.5rem)] max-w-xl gap-0 overflow-hidden p-0">
+      <DialogContent className="max-h-[90vh] w-full max-w-full gap-0 overflow-hidden p-0 sm:max-h-screen sm:max-w-lg md:max-w-xl">
         <DialogHeader className="border-b px-6 py-5 pr-14">
           <DialogTitle>My Schedule Details</DialogTitle>
           <DialogDescription>

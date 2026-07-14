@@ -89,7 +89,7 @@ export default function Home() {
         {/* Background */}
         <div className="absolute inset-0 -z-10 bg-linear-to-br from-primary/10 via-background to-cyan-500/10" />
 
-        <div className="mx-auto grid min-h-[85vh] max-w-7xl items-center gap-16 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:px-8">
+        <div className="mx-auto grid min-h-[85vh] max-w-7xl items-center gap-8 sm:gap-12 lg:gap-16 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-16">
           {/* Left */}
           <div>
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
@@ -139,8 +139,8 @@ export default function Home() {
           </div>
 
           {/* Right */}
-          <div className="relative">
-            <div className="relative mx-auto h-150 w-full max-w-md overflow-hidden rounded-[40px] bg-primary/10">
+          <div className="relative flex justify-center">
+            <div className="relative mx-auto h-80 w-full max-w-sm sm:max-w-md overflow-hidden rounded-[40px] bg-primary/10">
               <Image
                 src={bestDoctor?.profilePhoto || "/images/doctor.png"}
                 alt={bestDoctor?.name || "Doctor"}
@@ -150,33 +150,33 @@ export default function Home() {
               />
             </div>
 
-            {/* Appointment Card */}
-            <div className="absolute -left-6 top-10 rounded-2xl border bg-background p-4 shadow-xl">
-              <div className="flex items-center gap-3">
-                <div>
-                  <h4 className="font-semibold">{bestDoctor?.name}</h4>
+            {/* Appointment Card - Hidden on mobile, visible on sm+ */}
+            <div className="absolute -left-3 top-8 sm:top-10 sm:-left-6 rounded-xl sm:rounded-2xl border bg-background p-3 sm:p-4 shadow-lg sm:shadow-xl hidden sm:block">
+              <div className="flex items-center gap-2">
+                <div className="min-w-0">
+                  <h4 className="font-semibold text-sm">{bestDoctor?.name}</h4>
 
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs text-muted-foreground truncate">
                     {bestDoctor?.specialities?.[0]?.specialty?.title || "Specialist"}
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Rating Card */}
-            <div className="absolute -right-6 bottom-10 rounded-2xl border bg-background p-4 shadow-xl">
-              <div className="flex items-center gap-3">
-                <div className="rounded-full bg-yellow-100 p-3">
-                  <Star className="size-5 fill-yellow-400 text-yellow-400" />
+            {/* Rating Card - Hidden on mobile, visible on sm+ */}
+            <div className="absolute -right-3 bottom-8 sm:bottom-10 sm:-right-6 rounded-xl sm:rounded-2xl border bg-background p-3 sm:p-4 shadow-lg sm:shadow-xl hidden sm:block">
+              <div className="flex items-center gap-2">
+                <div className="rounded-full bg-yellow-100 p-2">
+                  <Star className="size-4 sm:size-5 fill-yellow-400 text-yellow-400" />
                 </div>
 
-                <div>
-                  <h4 className="font-semibold">
-                    {bestDoctor?.averageRating ?? "5.0"}/5 Rating
+                <div className="min-w-0">
+                  <h4 className="font-semibold text-sm">
+                    {bestDoctor?.averageRating ?? "5.0"}/5
                   </h4>
 
-                  <p className="text-sm text-muted-foreground">
-                    {bestDoctor?.experience} Years Experience
+                  <p className="text-xs text-muted-foreground">
+                    {bestDoctor?.experience}y exp
                   </p>
                 </div>
               </div>

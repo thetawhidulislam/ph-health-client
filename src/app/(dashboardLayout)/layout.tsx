@@ -9,11 +9,11 @@ const RootDashboardLayout = async ({
 }) => {
   return (
     <div className="min-h-screen bg-muted/10">
-      <div className="flex min-h-screen">
+      <div className="flex flex-col md:flex-row min-h-screen">
         <DashboardSidebar />
-        <main className="flex-1 overflow-x-hidden p-4 md:p-6 lg:p-8">
+        <main className="flex-1 overflow-x-auto w-full px-3 py-3 sm:px-4 sm:py-4 md:p-4 lg:p-6">
           <DashboardNavbar />
-          <div>{children}</div>
+          <div className="mt-4 sm:mt-6">{children}</div>
   
         </main>
       </div>

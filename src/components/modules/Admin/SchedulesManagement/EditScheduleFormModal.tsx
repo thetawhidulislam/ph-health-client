@@ -112,7 +112,7 @@ const EditScheduleFormModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] w-[calc(100vw-1.5rem)] max-w-[calc(100vw-1.5rem)] gap-0 overflow-hidden p-0 sm:w-[calc(100vw-3rem)] sm:max-w-[calc(100vw-3rem)] md:w-[calc(100vw-4rem)] md:max-w-[calc(100vw-4rem)] lg:w-[min(88vw,44rem)] lg:max-w-[min(88vw,44rem)]">
+      <DialogContent className="max-h-[90vh] w-full max-w-full gap-0 overflow-hidden p-0 sm:max-h-screen sm:max-w-md md:max-w-lg lg:max-w-xl">
         <DialogHeader className="border-b px-6 py-5 pr-14">
           <DialogTitle>Edit Schedule</DialogTitle>
           <DialogDescription>

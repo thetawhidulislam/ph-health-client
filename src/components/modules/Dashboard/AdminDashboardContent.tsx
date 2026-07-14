@@ -46,12 +46,12 @@ const AdminDashboardContent = () => {
   };
 
   return (
-    <div className="space-y-6 p-4 sm:p-6 lg:p-8 max-w-400 mx-auto text-foreground">
+    <div className="space-y-6 p-3 sm:p-4 md:p-6 lg:p-8 text-foreground">
       
       {/* Header Block */}
       <div className="flex flex-col gap-1">
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Admin Dashboard</h1>
-        <p className="text-sm text-muted-foreground">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+        <p className="text-xs sm:text-sm text-muted-foreground">
           Real-time platform overview, user registrations, and metrics.
         </p>
       </div>
