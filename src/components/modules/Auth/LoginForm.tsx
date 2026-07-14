@@ -94,30 +94,30 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
   };
 
   return (
-    <div className="relative mx-auto w-full max-w-md">
-      {/* Ambient care-glow, purely decorative */}
-      <div className="pointer-events-none absolute -top-16 -left-10 h-40 w-40 rounded-full bg-teal-200/40 blur-3xl dark:bg-teal-500/10" />
-      <div className="pointer-events-none absolute -bottom-14 -right-10 h-40 w-40 rounded-full bg-amber-200/40 blur-3xl dark:bg-amber-500/10" />
+    <div className="relative mx-auto w-full max-w-md overflow-hidden">
+      {/* Ambient care-glow, purely decorative - hidden on very small screens */}
+      <div className="pointer-events-none absolute -top-8 -left-8 h-32 w-32 sm:h-40 sm:w-40 rounded-full bg-teal-200/40 blur-3xl dark:bg-teal-500/10" />
+      <div className="pointer-events-none absolute -bottom-8 -right-8 h-32 w-32 sm:h-40 sm:w-40 rounded-full bg-amber-200/40 blur-3xl dark:bg-amber-500/10" />
 
-      <Card className="relative overflow-hidden rounded-[28px] border border-teal-900/10 bg-white/90 shadow-[0_20px_60px_-15px_rgba(11,79,74,0.25)] backdrop-blur-sm animate-in fade-in-0 zoom-in-95 duration-500 dark:border-teal-100/10 dark:bg-slate-900/90 dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]">
+      <Card className="relative overflow-hidden rounded-2xl sm:rounded-[28px] border border-teal-900/10 bg-white/90 shadow-[0_20px_60px_-15px_rgba(11,79,74,0.25)] backdrop-blur-sm animate-in fade-in-0 zoom-in-95 duration-500 dark:border-teal-100/10 dark:bg-slate-900/90 dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]">
         {/* Top accent bar */}
-        <div className="h-1.5 w-full bg-gradient-to-r from-teal-700 via-teal-500 to-amber-400 dark:from-teal-600 dark:via-teal-400 dark:to-amber-300" />
+        <div className="h-1 sm:h-1.5 w-full bg-gradient-to-r from-teal-700 via-teal-500 to-amber-400 dark:from-teal-600 dark:via-teal-400 dark:to-amber-300" />
 
-        <CardHeader className="pb-2 pt-8 text-center">
+        <CardHeader className="pb-2 pt-4 sm:pt-6 md:pt-8 px-4 sm:px-6 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-teal-700/80 dark:text-teal-400/90">
             PH Healthcare
           </p>
-          <CardTitle className="mt-2 font-serif text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-50">
+          <CardTitle className="mt-2 font-serif text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-50">
             Welcome back to your care record
           </CardTitle>
-          <CardDescription className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <CardDescription className="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
             Sign in to pick up right where your care team left off.
           </CardDescription>
 
           {/* Signature pulse-line divider */}
           <svg
             viewBox="0 0 400 32"
-            className="mx-auto mt-5 h-6 w-full max-w-[220px] text-teal-600/70 dark:text-teal-400/70"
+            className="mx-auto mt-3 sm:mt-5 h-4 sm:h-5 md:h-6 w-full max-w-[150px] sm:max-w-[220px] text-teal-600/70 dark:text-teal-400/70"
             fill="none"
           >
             <path
@@ -141,11 +141,11 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
               e.stopPropagation();
               form.handleSubmit();
             }}
-            className="space-y-5"
+            className="space-y-3 sm:space-y-4 md:space-y-5 px-4 sm:px-6"
           >
             {/* Quick demo access */}
-            <div className="rounded-2xl border border-teal-900/10 bg-teal-50/50 p-3 dark:border-teal-100/10 dark:bg-teal-950/30">
-              <p className="mb-3 px-1 text-xs font-medium uppercase tracking-wide text-teal-700/70 dark:text-teal-400/80">
+            <div className="rounded-lg sm:rounded-2xl border border-teal-900/10 bg-teal-50/50 p-2 sm:p-3 dark:border-teal-100/10 dark:bg-teal-950/30">
+              <p className="mb-2 sm:mb-3 px-1 text-xs font-medium uppercase tracking-wide text-teal-700/70 dark:text-teal-400/80">
                 Quick demo access
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
@@ -162,10 +162,10 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
                           account.role,
                         )
                       }
-                      className={`flex flex-col items-center gap-1 sm:gap-1.5 rounded-xl border border-transparent bg-white px-1.5 sm:px-2 py-2 sm:py-3 text-center shadow-sm transition dark:bg-slate-800 dark:shadow-none ${account.ring}`}
+                      className={`flex flex-col items-center gap-0.5 sm:gap-1 sm:gap-1.5 rounded-lg sm:rounded-xl border border-transparent bg-white px-1 sm:px-1.5 md:px-2 py-1.5 sm:py-2 md:py-3 text-center shadow-sm transition hover:shadow-md dark:bg-slate-800 dark:shadow-none ${account.ring}`}
                     >
-                      <Icon className={`size-4 sm:size-5 ${account.accent}`} />
-                      <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+                      <Icon className={`size-3.5 sm:size-4 md:size-5 ${account.accent}`} />
+                      <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 leading-tight">
                         {account.role}
                       </span>
                     </button>
@@ -221,7 +221,7 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
             <div className="-mt-1 text-right">
               <Link
                 href="/forgot-password"
-                className="text-sm font-medium text-teal-700 hover:underline underline-offset-4 dark:text-teal-400"
+                className="text-xs sm:text-sm font-medium text-teal-700 hover:underline underline-offset-4 dark:text-teal-400"
               >
                 Forgot password?
               </Link>
@@ -241,7 +241,7 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
                   isPending={isSubmitting || isPending}
                   pendingLabel="Logging In...."
                   disabled={!canSubmit}
-                  className="h-11 w-full rounded-full bg-[#353D4A] text-base font-medium tracking-wide text-white shadow-lg shadow-teal-700/20 transition hover:bg-[#313946] dark:shadow-teal-500/10"
+                  className="h-9 sm:h-10 md:h-11 w-full rounded-full bg-[#353D4A] text-sm sm:text-base font-medium tracking-wide text-white shadow-lg shadow-teal-700/20 transition hover:bg-[#313946] dark:shadow-teal-500/10"
                 >
                   Log In
                 </AppSubmitButton>
@@ -249,12 +249,12 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
             </form.Subscribe>
           </form>
 
-          <div className="relative my-6">
+          <div className="relative my-3 sm:my-4 md:my-6">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-slate-200 dark:border-slate-700" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="bg-white px-3 uppercase tracking-wide text-slate-400 dark:bg-slate-900 dark:text-slate-500">
+              <span className="bg-white px-2 sm:px-3 uppercase tracking-wide text-slate-400 text-xs sm:text-xs dark:bg-slate-900 dark:text-slate-500">
                 Or continue with
               </span>
             </div>
@@ -262,7 +262,7 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
 
           <Button
             variant="outline"
-            className="h-11 w-full rounded-full border-slate-200 font-medium hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
+            className="h-8 sm:h-9 md:h-10 lg:h-11 w-full rounded-full border-slate-200 text-sm sm:text-base font-medium hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
             onClick={() => {
               const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
               window.location.href = `${baseUrl}/auth/login/google`;
@@ -290,8 +290,8 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
           </Button>
         </CardContent>
 
-        <CardFooter className="justify-center border-t border-slate-100 pt-4 dark:border-slate-800">
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+        <CardFooter className="justify-center border-t border-slate-100 pt-2 sm:pt-3 md:pt-4 px-4 sm:px-6 pb-3 sm:pb-4 dark:border-slate-800">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 text-center">
             Don&apos;t have an account?{" "}
             <Link
               href="/register"

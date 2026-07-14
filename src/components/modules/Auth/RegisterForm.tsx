@@ -62,26 +62,26 @@ const RegisterForm = ({ redirectPath }: RegisterFormProps) => {
   });
 
   return (
-    <div className="relative mx-auto w-full max-w-md">
-      <div className="pointer-events-none absolute -top-16 -left-10 h-40 w-40 rounded-full bg-amber-200/40 blur-3xl dark:bg-amber-500/10" />
-      <div className="pointer-events-none absolute -bottom-14 -right-10 h-40 w-40 rounded-full bg-teal-200/40 blur-3xl dark:bg-teal-500/10" />
+    <div className="relative mx-auto w-full max-w-md overflow-hidden">
+      <div className="pointer-events-none absolute -top-8 -left-8 h-32 w-32 sm:h-40 sm:w-40 rounded-full bg-amber-200/40 blur-3xl dark:bg-amber-500/10" />
+      <div className="pointer-events-none absolute -bottom-8 -right-8 h-32 w-32 sm:h-40 sm:w-40 rounded-full bg-teal-200/40 blur-3xl dark:bg-teal-500/10" />
 
-      <Card className="relative overflow-hidden rounded-[28px] border border-teal-900/10 bg-white/90 shadow-[0_20px_60px_-15px_rgba(11,79,74,0.25)] backdrop-blur-sm animate-in fade-in-0 zoom-in-95 duration-500 dark:border-teal-100/10 dark:bg-slate-900/90 dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]">
-        <div className="h-1.5 w-full bg-gradient-to-r from-amber-500 via-amber-400 to-teal-400 dark:from-amber-400 dark:via-amber-300 dark:to-teal-300" />
+      <Card className="relative overflow-hidden rounded-2xl sm:rounded-[28px] border border-teal-900/10 bg-white/90 shadow-[0_20px_60px_-15px_rgba(11,79,74,0.25)] backdrop-blur-sm animate-in fade-in-0 zoom-in-95 duration-500 dark:border-teal-100/10 dark:bg-slate-900/90 dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]">
+        <div className="h-1 sm:h-1.5 w-full bg-gradient-to-r from-amber-500 via-amber-400 to-teal-400 dark:from-amber-400 dark:via-amber-300 dark:to-teal-300" />
 
-        <CardHeader className="pb-2 pt-8 text-center">
+        <CardHeader className="pb-2 pt-4 sm:pt-6 md:pt-8 px-4 sm:px-6 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-amber-700/80 dark:text-amber-400/90">
             PH Healthcare
           </p>
-          <CardTitle className="mt-2 font-serif text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-50">
+          <CardTitle className="mt-2 font-serif text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-50">
             Create your patient account
           </CardTitle>
-          <CardDescription className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <CardDescription className="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
             Register to manage appointments, prescriptions, and your profile.
           </CardDescription>
           <svg
             viewBox="0 0 400 32"
-            className="mx-auto mt-5 h-6 w-full max-w-[220px] text-amber-600/70 dark:text-amber-400/70"
+            className="mx-auto mt-3 sm:mt-5 h-4 sm:h-5 md:h-6 w-full max-w-[150px] sm:max-w-[220px] text-amber-600/70 dark:text-amber-400/70"
             fill="none"
           >
             <path
@@ -105,7 +105,7 @@ const RegisterForm = ({ redirectPath }: RegisterFormProps) => {
               e.stopPropagation();
               form.handleSubmit();
             }}
-            className="space-y-5"
+            className="space-y-3 sm:space-y-4 md:space-y-5 px-4 sm:px-6"
           >
             <form.Field
               name="name"
@@ -193,7 +193,7 @@ const RegisterForm = ({ redirectPath }: RegisterFormProps) => {
                   isPending={isSubmitting || isPending}
                   pendingLabel="Registering..."
                   disabled={!canSubmit}
-                  className="h-11 w-full rounded-full bg-[#353D4A] text-base font-medium tracking-wide text-white shadow-lg shadow-amber-700/20 transition hover:bg-[#313946] dark:shadow-amber-500/10"
+                  className="h-9 sm:h-10 md:h-11 w-full rounded-full bg-[#353D4A] text-sm sm:text-base font-medium tracking-wide text-white shadow-lg shadow-amber-700/20 transition hover:bg-[#313946] dark:shadow-amber-500/10"
                 >
                   Create Account
                 </AppSubmitButton>
@@ -201,20 +201,20 @@ const RegisterForm = ({ redirectPath }: RegisterFormProps) => {
             </form.Subscribe>
           </form>
 
-          <div className="relative my-6">
+          <div className="relative my-3 sm:my-4 md:my-6">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-slate-200 dark:border-slate-700" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="bg-white px-3 uppercase tracking-wide text-slate-400 dark:bg-slate-900 dark:text-slate-500">
-                Already have an account?
+              <span className="bg-white px-2 sm:px-3 uppercase tracking-wide text-slate-400 text-xs sm:text-xs dark:bg-slate-900 dark:text-slate-500">
+                Or continue with
               </span>
             </div>
           </div>
 
           <Button
             variant="outline"
-            className="h-11 w-full rounded-full border-slate-200 font-medium hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
+            className="h-8 sm:h-9 md:h-10 lg:h-11 w-full rounded-full border-slate-200 text-sm sm:text-base font-medium hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
             onClick={() => {
               const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
               window.location.href = `${baseUrl}/auth/login/google`;
@@ -242,8 +242,8 @@ const RegisterForm = ({ redirectPath }: RegisterFormProps) => {
           </Button>
         </CardContent>
 
-        <CardFooter className="justify-center border-t border-slate-100 pt-4 dark:border-slate-800">
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+        <CardFooter className="justify-center border-t border-slate-100 pt-2 sm:pt-3 md:pt-4 px-4 sm:px-6 pb-3 sm:pb-4 dark:border-slate-800">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 text-center">
             Already have an account?{" "}
             <Link
               href="/login"
