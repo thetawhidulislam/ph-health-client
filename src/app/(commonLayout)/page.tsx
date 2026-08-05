@@ -89,7 +89,7 @@ export default function Home() {
         {/* Background */}
         <div className="absolute inset-0 -z-10 bg-linear-to-br from-primary/10 via-background to-cyan-500/10" />
 
-        <div className="mx-auto grid min-h-[85vh] max-w-7xl items-center gap-8 sm:gap-12 lg:gap-16 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-16">
+        <div className="mx-auto grid min-h-screen max-w-7xl items-center gap-8 sm:gap-12 lg:gap-16 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-16">
           {/* Left */}
           <div>
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
@@ -140,7 +140,7 @@ export default function Home() {
 
           {/* Right */}
           <div className="relative flex justify-center">
-            <div className="relative mx-auto h-80 w-full max-w-sm sm:max-w-md overflow-hidden rounded-[40px] bg-primary/10">
+            <div className="relative mx-auto h-[24rem] w-full max-w-sm overflow-hidden rounded-[40px] bg-primary/10 sm:h-[30rem] sm:max-w-md lg:h-[36rem] lg:max-w-lg xl:h-[40rem]">
               <Image
                 src={bestDoctor?.profilePhoto || "/images/doctor.png"}
                 alt={bestDoctor?.name || "Doctor"}
