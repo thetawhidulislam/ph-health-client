@@ -140,7 +140,7 @@ export default function Home() {
 
           {/* Right */}
           <div className="relative flex justify-center">
-            <div className="relative mx-auto h-[24rem] w-full max-w-sm overflow-hidden rounded-[40px] bg-primary/10 sm:h-[30rem] sm:max-w-md lg:h-[36rem] lg:max-w-lg xl:h-[40rem]">
+            <div className="relative mx-auto h-96 w-full max-w-sm overflow-hidden rounded-[40px] bg-primary/10 sm:h-120 sm:max-w-md lg:h-144 lg:max-w-lg xl:h-160">
               <Image
                 src={bestDoctor?.profilePhoto || "/images/doctor.png"}
                 alt={bestDoctor?.name || "Doctor"}
