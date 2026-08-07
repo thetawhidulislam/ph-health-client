@@ -417,7 +417,7 @@ const DoctorsList = ({
 
                   <div className="mt-4 grid gap-2 rounded-lg bg-muted/40 p-3 text-sm">
                     <p>
-                      <span className="font-medium">Experience:</span>{" "}
+                      <span className="font-medium">Experiences:</span>{" "}
                       {doctor.experience ?? 0} years
                     </p>
                     <p>
